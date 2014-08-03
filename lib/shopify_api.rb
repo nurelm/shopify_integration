@@ -16,7 +16,7 @@ class ShopifyAPI
   def get_products
     product = Product.new
     begin
-      api_get 'products.json'
+      api_get 'products'
     rescue => e
       message = "Unable to retrieve products: \n" + e.message
       raise ShopifyError, message, caller
@@ -26,7 +26,7 @@ class ShopifyAPI
   private
   
   def api_get resource
-    response = RestClient.get shopify_url + resource
+    response = RestClient.get shopify_url + (final_resource resource)
     JSON.parse response
   end
 
@@ -38,6 +38,17 @@ class ShopifyAPI
   
   def shopify_url
     "https://#{@config['shopify_apikey']}:#{@config['shopify_password']}@#{@config['shopify_host']}/admin/"
+  end
+  
+  def final_resource resource
+    if !@config['since'].nil?
+      resource += ".json?updated_at_min=#{@config['since']}"
+    elsif !@config['id'].nil?
+      resource += "/#{@config['id']}.json"
+    else
+      resource += '.json'
+    end
+    resource
   end
 
 end
