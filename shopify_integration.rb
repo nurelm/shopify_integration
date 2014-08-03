@@ -3,7 +3,7 @@ require "endpoint_base"
 
 require_all 'lib'
 
-class shopifyIntegration < EndpointBase::Sinatra::Base
+class ShopifyIntegration < EndpointBase::Sinatra::Base
   set :logging, true
 
   # NOTE: Can only be used in development this will break production if left in uncommented.
@@ -22,7 +22,7 @@ class shopifyIntegration < EndpointBase::Sinatra::Base
     shopify_action('get_products')
   end
 
-  get '/get_shipments' do
+  post '/get_shipments' do
     shopify_action('get_shipments')
   end
 
