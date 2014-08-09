@@ -8,7 +8,7 @@ class Product
     @variants = Array.new
     shopify_product['variants'].each do |shopify_variant|
       variant = Variant.new
-      variant.add_shopify_obj shopify_variant
+      variant.add_shopify_obj shopify_variant, shopify_product['options']
       @variants << variant
     end
     
