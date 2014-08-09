@@ -17,6 +17,10 @@ class ShopifyAPI
     get_objs 'products', Product
   end
 
+  def get_customers
+    get_objs 'customers', Customer
+  end
+
 
   private
 

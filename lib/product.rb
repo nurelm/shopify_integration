@@ -23,8 +23,6 @@ class Product
   end
   
   def wombat_obj
-    ## Taxons
-    
     wombat_obj = Array.new
 
     @variants.each do |variant|
