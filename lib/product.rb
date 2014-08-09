@@ -14,7 +14,9 @@ class Product
     
     @images = Array.new
     shopify_product['images'].each do |shopify_image|
-      
+      image = Image.new
+      image.add_shopify_obj shopify_image
+      @images << image
     end
     
     @taxons = Array.new
@@ -23,10 +25,6 @@ class Product
   def wombat_obj
     ## Taxons
     
-    ## Options
-    
-    ## Images
-
     wombat_obj = Array.new
 
     @variants.each do |variant|
@@ -39,7 +37,8 @@ class Product
         "price" => variant.price,
         "meta_description" => @description,
         "shipping_category" => variant.shipping_category,
-        "options" => variant.options
+        "options" => variant.options,
+        "images" => Util.wombat_obj_array(@images)
       }
     end
     
