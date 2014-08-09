@@ -38,7 +38,8 @@ class Product
         "description" => @description,
         "price" => variant.price,
         "meta_description" => @description,
-        "shipping_category" => variant.shipping_category
+        "shipping_category" => variant.shipping_category,
+        "options" => variant.options
       }
     end
     
