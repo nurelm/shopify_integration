@@ -14,15 +14,24 @@ class ShopifyAPI
   end
 
   def get_products
-    product = Product.new
+    wombat_response = Hash.new
+    wombat_response['products'] = Array.new
     begin
-      api_get 'products'
+      shopify_products = api_get 'products'
+      shopify_products['products'].each do |shopify_product|
+        product = Product.new
+        product.add_shopify_obj shopify_product
+        wombat_response['products'] += product.wombat_obj
+      end
+
+      wombat_response
     rescue => e
       message = "Unable to retrieve products: \n" + e.message
       raise ShopifyError, message, caller
     end
   end
-  
+
+
   private
   
   def api_get resource

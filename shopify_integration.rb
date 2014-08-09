@@ -4,16 +4,6 @@ require "endpoint_base"
 require_all 'lib'
 
 class ShopifyIntegration < EndpointBase::Sinatra::Base
-  set :logging, true
-
-  # NOTE: Can only be used in development this will break production if left in uncommented.
-  # configure :development do
-  #   enable :logging, :dump_errors, :raise_errors
-  #   log = File.new("tmp/sinatra.log", "a")
-  #   STDOUT.reopen(log)
-  #   STDERR.reopen(log)
-  # end
-
   post '/get_orders' do
     shopify_action('get_orders')
   end
@@ -29,6 +19,9 @@ class ShopifyIntegration < EndpointBase::Sinatra::Base
   post '/get_customers' do
     shopify_action('get_customers')
   end
+  
+
+  private
 
   def shopify_action(action)
     begin
