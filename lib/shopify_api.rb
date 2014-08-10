@@ -30,7 +30,7 @@ class ShopifyAPI
   end
   
   def transactions order_id
-    
+    get_objs "orders/#{order_id}/transactions", Transaction
   end
 
 
@@ -46,9 +46,9 @@ class ShopifyAPI
     objs = Array.new
     begin
       shopify_objs = api_get objs_name
-      shopify_objs[objs_name].each do |shopify_obj|
+      shopify_objs[objs_name.split('/')[-1]].each do |shopify_obj|
         obj = obj_class.new
-        obj.add_shopify_obj shopify_obj
+        obj.add_shopify_obj shopify_obj, self
         objs << obj
       end
 

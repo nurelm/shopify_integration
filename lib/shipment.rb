@@ -1,6 +1,6 @@
 class Shipment
 
-  def add_shopify_obj shopify_shipment
+  def add_shopify_obj shopify_shipment, shopify_api
     @shopify_id = shopify_shipment['id']
   end
   

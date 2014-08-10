@@ -1,25 +1,41 @@
 class Order
 
-  def add_shopify_obj shopify_order
+  def add_shopify_obj shopify_order, shopify_api
     @shopify_id = shopify_order['id']
+    @status = shopify_order['financial_status'] + ' / ' + shopify_order['fulfillment_status']
+    @email = shopify_order['email']
+    @currency = shopify_order['currency']
+    @placed_on = shopify_order['created_at']
+    @totals_item = shopify_order['total_line_items_price']
+    @totals_tax = shopify_order['total_tax']
+    @totals_shipping = 0.00
+    shopify_order['shipping_lines'].each do |shipping_line|
+      @totals_shipping += shipping_line['price'].to_f
+    end
+    @totals_payment = 0.00
+    shopify_api.transactions(@shopify_id).each do |transaction|
+      if transaction.kind == 'capture' and transaction.status == 'success'
+        @totals_payment += transaction.amount.to_f
+      end
+    end
+    @totals_order = shopify_order['total_price']
   end
   
   def wombat_obj
     [
       {
-        'id' => 'R154085346953692',
-        'status' => 'complete',
-        'channel' => 'spree',
-        'email' => 'spree@example.com',
-        'currency' => 'USD',
-        'placed_on' => '2014-02-03T17:29:15.219Z',
+        'id' => @shopify_id,
+        'status' => @status,
+        'channel' => 'shopify',
+        'email' => @email,
+        'currency' => @currency,
+        'placed_on' => @placed_on,
         'totals' => {
-          'item' => 200,
-          'adjustment' => 20,
-          'tax' => 10,
-          'shipping' => 10,
-          'payment' => 220,
-          'order' => 220
+          'item' => @totals_item,
+          'tax' => @totals_tax,
+          'shipping' => @totals_shipping,
+          'payment' => @totals_payment,
+          'order' => @totals_order
         },
         'line_items' => [
           {
