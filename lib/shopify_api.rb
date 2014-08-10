@@ -21,6 +21,14 @@ class ShopifyAPI
     get_objs 'customers', Customer
   end
 
+  def get_shipments
+    get_objs 'shipments', Shipment
+  end
+
+  def get_orders
+    get_objs 'orders', Order
+  end
+
 
   private
 
