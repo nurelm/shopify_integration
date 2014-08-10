@@ -38,7 +38,7 @@ class ShopifyAPI
 
   def wombat_hash objs_name, obj_class
     wombat_hash = Hash.new
-    wombat_hash[objs_name] = wombat_array(get_objs objs_name, obj_class)
+    wombat_hash[objs_name] = Util.wombat_array(get_objs objs_name, obj_class)
     wombat_hash
   end
 
@@ -57,15 +57,6 @@ class ShopifyAPI
       message = "Unable to retrieve #{objs_name}: \n" + e.message
       raise ShopifyError, message, caller
     end
-  end
-  
-  def wombat_array objs
-    wombat_array = Array.new
-    objs.each do |obj|
-      wombat_array += obj.wombat_obj
-    end
-
-    wombat_array
   end
   
   def api_get resource

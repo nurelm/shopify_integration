@@ -19,6 +19,13 @@ class Order
       end
     end
     @totals_order = shopify_order['total_price']
+    @line_items = Array.new
+    shopify_order['line_items'].each do |shopify_li|
+      line_item = LineItem.new
+      @line_items << line_item.add_shopify_obj(shopify_li, shopify_api)
+    end
+    
+    self
   end
   
   def wombat_obj
@@ -37,14 +44,7 @@ class Order
           'payment' => @totals_payment,
           'order' => @totals_order
         },
-        'line_items' => [
-          {
-            'product_id' => 'SPREE-T-SHIRT',
-            'name' => 'Spree T-Shirt',
-            'quantity' => 2,
-            'price' => 100
-          }
-        ],
+        'line_items' => Util.wombat_array(@line_items),
         'adjustments' => [
           {
             'name' => 'Tax',

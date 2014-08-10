@@ -18,6 +18,8 @@ class Transaction
     @shopify_user_id = shopify_object['user_id']
     @shopify_order_id = shopify_object['order_id']
     @device_id = shopify_object['device_id']
+    
+    self
   end
 
 end
