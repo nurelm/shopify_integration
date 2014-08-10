@@ -6,8 +6,9 @@ class Order
     @email = shopify_order['email']
     @currency = shopify_order['currency']
     @placed_on = shopify_order['created_at']
-    @totals_item = shopify_order['total_line_items_price']
-    @totals_tax = shopify_order['total_tax']
+    @totals_item = shopify_order['total_line_items_price'].to_f
+    @totals_tax = shopify_order['total_tax'].to_f
+    @totals_discounts = shopify_order['total_discounts'].to_f
     @totals_shipping = 0.00
     shopify_order['shipping_lines'].each do |shipping_line|
       @totals_shipping += shipping_line['price'].to_f
@@ -48,15 +49,15 @@ class Order
         'adjustments' => [
           {
             'name' => 'Tax',
-            'value' => 10
+            'value' => @totals_tax
           },
           {
             'name' => 'Shipping',
-            'value' => 5
+            'value' => @totals_shipping
           },
           {
-            'name' => 'Shipping',
-            'value' => 5
+            'name' => 'Discounts',
+            'value' => @totals_discounts
           }
         ],
         'shipping_address' => {
