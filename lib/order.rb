@@ -13,10 +13,13 @@ class Order
     shopify_order['shipping_lines'].each do |shipping_line|
       @totals_shipping += shipping_line['price'].to_f
     end
+    @payments = Array.new
     @totals_payment = 0.00
     shopify_api.transactions(@shopify_id).each do |transaction|
       if transaction.kind == 'capture' and transaction.status == 'success'
         @totals_payment += transaction.amount.to_f
+        payment = Payment.new
+        @payments << payment.add_shopify_obj(transaction, shopify_api)
       end
     end
     @totals_order = shopify_order['total_price']
@@ -84,14 +87,7 @@ class Order
         ],
         'shipping_address' => @shipping_address,
         'billing_address' => @billing_address,
-        'payments' => [
-          {
-            'number' => 63,
-            'status' => 'completed',
-            'amount' => 220,
-            'payment_method' => 'Credit Card'
-          }
-        ]
+        'payments' => Util.wombat_array(@payments)
       }      
     ]
   end
