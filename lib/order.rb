@@ -25,6 +25,28 @@ class Order
       line_item = LineItem.new
       @line_items << line_item.add_shopify_obj(shopify_li, shopify_api)
     end
+    @shipping_address = {
+      'firstname' => shopify_order['shipping_address']['first_name'],
+      'lastname' => shopify_order['shipping_address']['last_name'],
+      'address1' => shopify_order['shipping_address']['address1'],
+      'address2' => shopify_order['shipping_address']['address2'],
+      'zipcode' => shopify_order['shipping_address']['zip'],
+      'city' => shopify_order['shipping_address']['city'],
+      'state' => shopify_order['shipping_address']['province'],
+      'country' => shopify_order['shipping_address']['country_code'],
+      'phone' => shopify_order['shipping_address']['phone']
+    }
+    @billing_address = {
+      'firstname' => shopify_order['billing_address']['first_name'],
+      'lastname' => shopify_order['billing_address']['last_name'],
+      'address1' => shopify_order['billing_address']['address1'],
+      'address2' => shopify_order['billing_address']['address2'],
+      'zipcode' => shopify_order['billing_address']['zip'],
+      'city' => shopify_order['billing_address']['city'],
+      'state' => shopify_order['billing_address']['province'],
+      'country' => shopify_order['billing_address']['country_code'],
+      'phone' => shopify_order['billing_address']['phone']
+    }
     
     self
   end
@@ -60,28 +82,8 @@ class Order
             'value' => @totals_discounts
           }
         ],
-        'shipping_address' => {
-          'firstname' => 'Joe',
-          'lastname' => 'Smith',
-          'address1' => '1234 Awesome Street',
-          'address2' => '',
-          'zipcode' => '90210',
-          'city' => 'Hollywood',
-          'state' => 'California',
-          'country' => 'US',
-          'phone' => '0000000000'
-        },
-        'billing_address' => {
-          'firstname' => 'Joe',
-          'lastname' => 'Smith',
-          'address1' => '1234 Awesome Street',
-          'address2' => '',
-          'zipcode' => '90210',
-          'city' => 'Hollywood',
-          'state' => 'California',
-          'country' => 'US',
-          'phone' => '0000000000'
-        },
+        'shipping_address' => @shipping_address,
+        'billing_address' => @billing_address,
         'payments' => [
           {
             'number' => 63,
