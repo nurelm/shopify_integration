@@ -13,41 +13,59 @@ class ShopifyAPI
     @config = config
   end
 
-  def get_products
-    get_objs 'products', Product
+  def wombat_products
+    wombat_hash 'products', Product
   end
 
-  def get_customers
-    get_objs 'customers', Customer
+  def wombat_customers
+    wombat_hash 'customers', Customer
   end
 
-  def get_shipments
-    get_objs 'shipments', Shipment
+  def wombat_shipments
+    wombat_hash 'shipments', Shipment
   end
 
-  def get_orders
-    get_objs 'orders', Order
+  def wombat_orders
+    wombat_hash 'orders', Order
+  end
+  
+  def transactions order_id
+    
   end
 
 
   private
 
+  def wombat_hash objs_name, obj_class
+    wombat_hash = Hash.new
+    wombat_hash[objs_name] = wombat_array(get_objs objs_name, obj_class)
+    wombat_hash
+  end
+
   def get_objs objs_name, obj_class
-    wombat_response = Hash.new
-    wombat_response[objs_name] = Array.new
+    objs = Array.new
     begin
       shopify_objs = api_get objs_name
       shopify_objs[objs_name].each do |shopify_obj|
         obj = obj_class.new
         obj.add_shopify_obj shopify_obj
-        wombat_response[objs_name] += obj.wombat_obj
+        objs << obj
       end
 
-      wombat_response
+      objs
     rescue => e
       message = "Unable to retrieve #{objs_name}: \n" + e.message
       raise ShopifyError, message, caller
     end
+  end
+  
+  def wombat_array objs
+    wombat_array = Array.new
+    objs.each do |obj|
+      wombat_array += obj.wombat_obj
+    end
+
+    wombat_array
   end
   
   def api_get resource
