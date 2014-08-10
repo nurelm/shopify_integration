@@ -1,6 +1,6 @@
 class Product
 
-  def add_shopify_obj shopify_product
+  def add_shopify_obj shopify_product, shopify_api
     @shopify_id = shopify_product['id']
     @name = shopify_product['title']
     @description = shopify_product['body_html']

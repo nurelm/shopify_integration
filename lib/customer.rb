@@ -1,6 +1,6 @@
 class Customer
 
-  def add_shopify_obj shopify_customer
+  def add_shopify_obj shopify_customer, shopify_api
     @shopify_id = shopify_customer['id']
     @firstname = shopify_customer['first_name']
     @lastname = shopify_customer['last_name']
