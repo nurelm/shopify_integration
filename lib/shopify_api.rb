@@ -22,23 +22,39 @@ class ShopifyAPI
   end
 
   def wombat_shipments
-    wombat_hash 'shipments', Shipment
+    shipments = Array.new
+    get_objs('orders', Order).each do |order|
+      shipments += shipments(order.shopify_id)
+    end
+    wombat_hash_from_objs 'shipments', shipments
   end
 
   def wombat_orders
     wombat_hash 'orders', Order
   end
   
+  def order order_id
+    get_objs "orders/#{order_id}", Order
+  end
+
   def transactions order_id
     get_objs "orders/#{order_id}/transactions", Transaction
+  end
+
+  def shipments order_id
+    get_objs "orders/#{order_id}/fulfillments", Shipment
   end
 
 
   private
 
   def wombat_hash objs_name, obj_class
+    wombat_hash_from_objs objs_name, get_objs(objs_name, obj_class)
+  end
+  
+  def wombat_hash_from_objs objs_name, objs
     wombat_hash = Hash.new
-    wombat_hash[objs_name] = Util.wombat_array(get_objs objs_name, obj_class)
+    wombat_hash[objs_name] = Util.wombat_array(objs)
     wombat_hash
   end
 
@@ -46,9 +62,15 @@ class ShopifyAPI
     objs = Array.new
     begin
       shopify_objs = api_get objs_name
-      shopify_objs[objs_name.split('/')[-1]].each do |shopify_obj|
+      if shopify_objs.values.first.kind_of?(Array)
+        shopify_objs.values.first.each do |shopify_obj|
+          obj = obj_class.new
+          obj.add_shopify_obj shopify_obj, self
+          objs << obj
+        end
+      else
         obj = obj_class.new
-        obj.add_shopify_obj shopify_obj, self
+        obj.add_shopify_obj shopify_objs.values.first, self
         objs << obj
       end
 
