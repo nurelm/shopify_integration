@@ -5,19 +5,19 @@ require_all 'lib'
 
 class ShopifyIntegration < EndpointBase::Sinatra::Base
   post '/get_orders' do
-    shopify_action('wombat_orders')
+    add_object shopify_action('wombat_orders')
   end
 
   post '/get_products' do
-    shopify_action('wombat_products')
+    add_object shopify_action('wombat_products')
   end
 
   post '/get_shipments' do
-    shopify_action('wombat_shipments')
+    add_object shopify_action('wombat_shipments')
   end
 
   post '/get_customers' do
-    shopify_action('wombat_customers')
+    add_object shopify_action('wombat_customers')
   end
   
 

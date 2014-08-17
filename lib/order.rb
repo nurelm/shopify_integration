@@ -1,5 +1,7 @@
 class Order
 
+  attr_reader :shopify_id, :email, :shipping_address, :billing_address
+
   def add_shopify_obj shopify_order, shopify_api
     @shopify_id = shopify_order['id']
     @status = shopify_order['financial_status'] + ' / ' + shopify_order['fulfillment_status']
