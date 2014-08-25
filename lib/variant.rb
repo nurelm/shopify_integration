@@ -18,5 +18,21 @@ class Variant
       end
     end
   end
+  
+  def add_wombat_obj wombat_variant
+    @price = wombat_variant['price']
+    @sku = wombat_variant['sku']
+    @options = Hash.new
+    wombat_variant['options'].values.each_with_index do |value, index|
+      @options['option' + (index + 1).to_s] = value
+    end
+  end
+  
+  def shopify_obj
+    {
+      "price" => @price,
+      "sku" => @sku
+    }.merge(@options)
+  end
 
 end
