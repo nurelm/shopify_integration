@@ -13,15 +13,15 @@ class ShopifyAPI
     @config = config
   end
 
-  def wombat_products
+  def get_wombat_products
     wombat_hash 'products', Product
   end
 
-  def wombat_customers
+  def get_wombat_customers
     wombat_hash 'customers', Customer
   end
 
-  def wombat_shipments
+  def get_wombat_shipments
     shipments = Array.new
     get_objs('orders', Order).each do |order|
       shipments += shipments(order.shopify_id)
@@ -29,8 +29,14 @@ class ShopifyAPI
     wombat_hash_from_objs 'shipments', shipments
   end
 
-  def wombat_orders
+  def get_wombat_orders
     wombat_hash 'orders', Order
+  end
+  
+  def add_wombat_product
+    product = Product.new
+    product.add_wombat_obj @payload['products'].first, self
+    api_post 'products.json', product.shopify_obj
   end
   
   def order order_id
@@ -87,6 +93,7 @@ class ShopifyAPI
   end
 
   def api_post resource, data
+    puts data.to_json
     response = RestClient.post shopify_url + resource, data,
                                :content_type => :json, :accept => :json
     JSON.parse response
