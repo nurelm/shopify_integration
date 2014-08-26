@@ -67,7 +67,6 @@ class ShopifyAPI
   end
   
   def wombat_hash_from_objs objs_name, objs
-    puts "OBJS: " + objs.to_json
     wombat_hash = Hash.new
     wombat_hash[objs_name] = Util.wombat_array(objs)
     wombat_hash

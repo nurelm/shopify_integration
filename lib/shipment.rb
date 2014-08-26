@@ -20,19 +20,17 @@ class Shipment
   end
   
   def wombat_obj
-    [
-      {
-        'id' => @shopify_id,
-        'order_id' => @shopify_order_id,
-        'email' => @email,
-        'status' => @status,
-        'shipping_method' => @shipping_method,
-        'tracking' => @tracking,
-        'shipped_at' => @shipped_at,
-        'shipping_address' => @shipping_address,
-        'items' => Util.wombat_array(@line_items)
-      }
-    ]
+    {
+      'id' => @shopify_id,
+      'order_id' => @shopify_order_id,
+      'email' => @email,
+      'status' => @status,
+      'shipping_method' => @shipping_method,
+      'tracking' => @tracking,
+      'shipped_at' => @shipped_at,
+      'shipping_address' => @shipping_address,
+      'items' => Util.wombat_array(@line_items)
+    }
   end
 
 end
