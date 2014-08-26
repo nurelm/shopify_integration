@@ -5,27 +5,27 @@ require_all 'lib'
 
 class ShopifyIntegration < EndpointBase::Sinatra::Base
   post '/get_orders' do
-    add_object shopify_action('get_wombat_orders')
+    shopify_action('get_wombat_orders')
   end
 
   post '/get_products' do
-    add_object shopify_action('get_wombat_products')
+    shopify_action('get_wombat_products')
   end
 
   post '/get_shipments' do
-    add_object shopify_action('get_wombat_shipments')
+    shopify_action('get_wombat_shipments')
   end
 
   post '/get_customers' do
-    add_object shopify_action('get_wombat_customers')
+    shopify_action('get_wombat_customers')
   end
   
   post '/add_product' do
-    add_object shopify_action('add_wombat_product')
+    shopify_action('add_wombat_product')
   end
   
   post '/add_customer' do
-    add_object shopify_action('add_wombat_customer')
+    shopify_action('add_wombat_customer')
   end
 
   private
@@ -34,7 +34,10 @@ class ShopifyIntegration < EndpointBase::Sinatra::Base
     begin
       shopify = ShopifyAPI.new(@payload, @config)
       response  = shopify.send(action)
-      result 200, response
+      response['objects'].each do |obj|
+        add_object "product", obj
+      end
+      result 200, response['message']
     rescue => e
       print e.cause
       print e.backtrace.join("\n")

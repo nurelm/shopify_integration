@@ -14,11 +14,11 @@ class ShopifyAPI
   end
 
   def get_wombat_products
-    wombat_hash 'products', Product
+    get_webhook_results 'products', Product
   end
-
+  
   def get_wombat_customers
-    wombat_hash 'customers', Customer
+    get_webhook_results 'customers', Customer
   end
 
   def get_wombat_shipments
@@ -26,11 +26,11 @@ class ShopifyAPI
     get_objs('orders', Order).each do |order|
       shipments += shipments(order.shopify_id)
     end
-    wombat_hash_from_objs 'shipments', shipments
+    get_webhook_results 'shipments', shipments, false
   end
 
   def get_wombat_orders
-    wombat_hash 'orders', Order
+    get_webhook_results 'orders', Order
   end
   
   def add_wombat_product
@@ -62,14 +62,12 @@ class ShopifyAPI
 
   private
 
-  def wombat_hash objs_name, obj_class
-    wombat_hash_from_objs objs_name, get_objs(objs_name, obj_class)
-  end
-  
-  def wombat_hash_from_objs objs_name, objs
-    wombat_hash = Hash.new
-    wombat_hash[objs_name] = Util.wombat_array(objs)
-    wombat_hash
+  def get_webhook_results obj_name, obj, get_objs = true
+    objs = Util.wombat_array(get_objs ? get_objs(obj_name, obj) : obj)
+    {
+      'objects' => objs,
+      'message' => "Successfully retrieved #{objs.length} #{obj_name}s from Shopify."
+    }
   end
 
   def get_objs objs_name, obj_class
