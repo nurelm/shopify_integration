@@ -24,6 +24,9 @@ class ShopifyIntegration < EndpointBase::Sinatra::Base
     add_object shopify_action('add_wombat_product')
   end
   
+  post '/add_customer' do
+    add_object shopify_action('add_wombat_customer')
+  end
 
   private
 
