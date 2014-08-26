@@ -66,7 +66,7 @@ class ShopifyAPI
     objs = Util.wombat_array(get_objs ? get_objs(obj_name, obj) : obj)
     {
       'objects' => objs,
-      'message' => "Successfully retrieved #{objs.length} #{obj_name}s from Shopify."
+      'message' => "Successfully retrieved #{objs.length} #{obj_name} from Shopify."
     }
   end
 
