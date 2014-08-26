@@ -36,7 +36,8 @@ class ShopifyAPI
   def add_wombat_product
     product = Product.new
     product.add_wombat_obj @payload['products'].first, self
-    api_post 'products.json', product.shopify_obj
+    result = api_post 'products.json', product.shopify_obj
+    "Product with added with Shopify ID of #{result['product']['id']} was added."
   end
   
   def order order_id
