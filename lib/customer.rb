@@ -17,16 +17,14 @@ class Customer
   end
   
   def wombat_obj
-    [
-      {
-        'id' => @shopify_id,
-        'firstname' => @firstname,
-        'lastname' => @lastname,
-        'email' => @email,
-        'shipping_address' => @default_address.wombat_obj,
-        'billing_address' => @default_address.wombat_obj
-      }
-    ]
+    {
+      'id' => @shopify_id,
+      'firstname' => @firstname,
+      'lastname' => @lastname,
+      'email' => @email,
+      'shipping_address' => @default_address.wombat_obj,
+      'billing_address' => @default_address.wombat_obj
+    }
   end
   
   def shopify_obj

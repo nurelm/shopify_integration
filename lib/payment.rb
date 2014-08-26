@@ -8,13 +8,11 @@ class Payment
   end
   
   def wombat_obj
-    [
-      {
-        'status' => 'completed',
-        'amount' => @amount,
-        'payment_method' => @payment_method
-      } 
-    ]
+    {
+      'status' => 'completed',
+      'amount' => @amount,
+      'payment_method' => @payment_method
+    } 
   end
 
 end

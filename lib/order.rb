@@ -57,41 +57,39 @@ class Order
   end
   
   def wombat_obj
-    [
-      {
-        'id' => @shopify_id,
-        'status' => @status,
-        'channel' => 'shopify',
-        'email' => @email,
-        'currency' => @currency,
-        'placed_on' => @placed_on,
-        'totals' => {
-          'item' => @totals_item,
-          'tax' => @totals_tax,
-          'shipping' => @totals_shipping,
-          'payment' => @totals_payment,
-          'order' => @totals_order
+    {
+      'id' => @shopify_id,
+      'status' => @status,
+      'channel' => 'shopify',
+      'email' => @email,
+      'currency' => @currency,
+      'placed_on' => @placed_on,
+      'totals' => {
+        'item' => @totals_item,
+        'tax' => @totals_tax,
+        'shipping' => @totals_shipping,
+        'payment' => @totals_payment,
+        'order' => @totals_order
+      },
+      'line_items' => Util.wombat_array(@line_items),
+      'adjustments' => [
+        {
+          'name' => 'Tax',
+          'value' => @totals_tax
         },
-        'line_items' => Util.wombat_array(@line_items),
-        'adjustments' => [
-          {
-            'name' => 'Tax',
-            'value' => @totals_tax
-          },
-          {
-            'name' => 'Shipping',
-            'value' => @totals_shipping
-          },
-          {
-            'name' => 'Discounts',
-            'value' => @totals_discounts
-          }
-        ],
-        'shipping_address' => @shipping_address,
-        'billing_address' => @billing_address,
-        'payments' => Util.wombat_array(@payments)
-      }      
-    ]
+        {
+          'name' => 'Shipping',
+          'value' => @totals_shipping
+        },
+        {
+          'name' => 'Discounts',
+          'value' => @totals_discounts
+        }
+      ],
+      'shipping_address' => @shipping_address,
+      'billing_address' => @billing_address,
+      'payments' => Util.wombat_array(@payments)
+    }      
   end
       
 end
