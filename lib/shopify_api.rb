@@ -3,9 +3,6 @@ require 'rest-client'
 require 'pp'
 
 class ShopifyAPI
-  CLIENT_SECRET = "893e71f8102c0da571e4aab02e408b7e"
-  BASE_API_URI = ""
-
   attr_accessor :order, :config, :payload, :request
 
   def initialize(payload, config={})
