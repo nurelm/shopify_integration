@@ -44,7 +44,10 @@ class ShopifyAPI
     customer = Customer.new
     customer.add_wombat_obj @payload['customers'].first, self
     result = api_post 'customers.json', customer.shopify_obj
-    "Customer added with Shopify ID of #{result['customer']['id']} was added."
+    {
+      'objects' => result,
+      'message' => "Customer added with Shopify ID of #{result['customer']['id']} was added."
+    }
   end
   
   def order order_id

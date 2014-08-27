@@ -25,7 +25,7 @@ class ShopifyIntegration < EndpointBase::Sinatra::Base
   end
   
   post '/add_customer' do
-    shopify_action 'add_customer', 'product'
+    shopify_action 'add_customer', 'customer'
   end
 
   private
