@@ -50,6 +50,16 @@ class ShopifyAPI
     }
   end
   
+  def update_customer
+    customer = Customer.new
+    customer.add_wombat_obj @payload['customers'].first, self
+    result = api_put "customers//#{customer.shopify_id}.json", customer.shopify_obj
+    {
+      'objects' => result,
+      'message' => "Customer added with Shopify ID of #{result['customer']['id']} was updated."
+    }
+  end
+  
   def order order_id
     get_objs "orders/#{order_id}", Order
   end
@@ -104,6 +114,13 @@ class ShopifyAPI
   def api_post resource, data
     response = RestClient.post shopify_url + resource, data.to_json,
                                :content_type => :json, :accept => :json
+    JSON.parse response
+  end
+
+  def api_put resource, data
+    puts data.to_json
+    response = RestClient.put shopify_url + resource, data.to_json,
+                              :content_type => :json, :accept => :json
     JSON.parse response
   end
   
