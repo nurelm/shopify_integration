@@ -1,5 +1,7 @@
 class Customer
 
+  attr_reader :shopify_id
+  
   def add_shopify_obj shopify_customer, shopify_api
     @shopify_id = shopify_customer['id']
     @firstname = shopify_customer['first_name']
@@ -9,6 +11,7 @@ class Customer
   end
   
   def add_wombat_obj wombat_customer, shopfiy_api
+    @shopify_id = wombat_customer['id']
     @firstname = wombat_customer['firstname']
     @lastname = wombat_customer['lastname']
     @email = wombat_customer['email']

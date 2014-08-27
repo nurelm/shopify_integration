@@ -23,6 +23,7 @@ class Product
   end
   
   def add_wombat_obj wombat_product, shopify_api
+    @shopify_id = wombat_product['id']
     @name = wombat_product['name']
     @description = wombat_product['description']
     
