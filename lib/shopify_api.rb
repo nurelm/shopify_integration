@@ -10,15 +10,15 @@ class ShopifyAPI
     @config = config
   end
 
-  def get_wombat_products
+  def get_products
     get_webhook_results 'products', Product
   end
   
-  def get_wombat_customers
+  def get_customers
     get_webhook_results 'customers', Customer
   end
 
-  def get_wombat_shipments
+  def get_shipments
     shipments = Array.new
     get_objs('orders', Order).each do |order|
       shipments += shipments(order.shopify_id)
@@ -26,18 +26,18 @@ class ShopifyAPI
     get_webhook_results 'shipments', shipments, false
   end
 
-  def get_wombat_orders
+  def get_orders
     get_webhook_results 'orders', Order
   end
   
-  def add_wombat_product
+  def add_product
     product = Product.new
     product.add_wombat_obj @payload['products'].first, self
     result = api_post 'products.json', product.shopify_obj
     "Product added with Shopify ID of #{result['product']['id']} was added."
   end
   
-  def add_wombat_customer
+  def add_customer
     customer = Customer.new
     customer.add_wombat_obj @payload['customers'].first, self
     result = api_post 'customers.json', customer.shopify_obj
