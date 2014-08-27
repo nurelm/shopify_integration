@@ -34,8 +34,10 @@ class ShopifyIntegration < EndpointBase::Sinatra::Base
     begin
       shopify = ShopifyAPI.new(@payload, @config)
       response  = shopify.send(action)
-      response['objects'].each do |obj|
-        add_object obj_name, obj
+      if response['objects'].kind_of?(Array)
+        response['objects'].each do |obj|
+          add_object obj_name, obj
+        end
       end
       result 200, response['message']
     rescue => e
