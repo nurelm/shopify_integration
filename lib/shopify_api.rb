@@ -42,7 +42,7 @@ class ShopifyAPI
   
   def add_customer
     customer = Customer.new
-    customer.add_wombat_obj @payload['customers'].first, self
+    customer.add_wombat_obj @payload['customer'], self
     result = api_post 'customers.json', customer.shopify_obj
     {
       'objects' => result,
