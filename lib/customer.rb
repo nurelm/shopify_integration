@@ -11,6 +11,7 @@ class Customer
   end
   
   def add_wombat_obj wombat_customer, shopfiy_api
+    @shopify_id = wombat_customer['shopify_id']
     @firstname = wombat_customer['firstname']
     @lastname = wombat_customer['lastname']
     @email = wombat_customer['email']

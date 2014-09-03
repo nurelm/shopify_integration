@@ -52,8 +52,8 @@ class ShopifyAPI
   
   def update_customer
     customer = Customer.new
-    customer.add_wombat_obj @payload['customers'].first, self
-    result = api_put "customers//#{customer.shopify_id}.json", customer.shopify_obj
+    customer.add_wombat_obj @payload['customer'], self
+    result = api_put "customers/#{customer.shopify_id}.json", customer.shopify_obj
     {
       'objects' => result,
       'message' => "Customer added with Shopify ID of #{result['customer']['id']} was updated."

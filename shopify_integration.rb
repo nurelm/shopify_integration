@@ -50,8 +50,6 @@ class ShopifyIntegration < EndpointBase::Sinatra::Base
       else
         # This will do a partial update in Wombat, only the new key
         # shopify_id will be added everything else will be the same
-        puts "Storing Shopify ID of " + response['objects'][obj_name]['id'].to_s +
-             " for Wombat object ID of " + @payload[obj_name]['id'].to_s
         add_object obj_name, { id: @payload[obj_name]['id'],
                                shopify_id: response['objects'][obj_name]['id'] }
       end
