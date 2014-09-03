@@ -11,7 +11,6 @@ class Customer
   end
   
   def add_wombat_obj wombat_customer, shopfiy_api
-    @shopify_id = wombat_customer['id']
     @firstname = wombat_customer['firstname']
     @lastname = wombat_customer['lastname']
     @email = wombat_customer['email']
@@ -32,11 +31,11 @@ class Customer
   
   def shopify_obj
     {
-      "customer" => {
-        "first_name" => @firstname,
-        "last_name" => @lastname,
-        "email" => @email,
-        "addresses" => [
+      'customer' => {
+        'first_name' => @firstname,
+        'last_name' => @lastname,
+        'email' => @email,
+        'addresses' => [
           @shipping_address.shopify_obj,
           @billing_address.shopify_obj
         ]
