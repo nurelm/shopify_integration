@@ -101,7 +101,7 @@ class ShopifyAPI
 
       objs
     rescue => e
-      message = "Unable to retrieve #{objs_name}: \n" + e.message
+      message = "Unable to retrieve #{objs_name}: " + e.message
       raise ShopifyError, message, caller
     end
   end

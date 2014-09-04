@@ -4,7 +4,8 @@ class Order
 
   def add_shopify_obj shopify_order, shopify_api
     @shopify_id = shopify_order['id']
-    @status = shopify_order['financial_status'] + ' / ' + shopify_order['fulfillment_status']
+    @status = (shopify_order['financial_stauts'] || "financial status not set") + ' / ' +
+              (shopify_order['fulfillment_stauts'] || "fulfillment status not set")
     @email = shopify_order['email']
     @currency = shopify_order['currency']
     @placed_on = shopify_order['created_at']
