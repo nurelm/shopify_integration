@@ -23,6 +23,7 @@ class Shipment
   def wombat_obj
     {
       'id' => @shopify_id,
+      'shopify_id' => @shopify_id,
       'order_id' => @shopify_order_id,
       'email' => @email,
       'status' => @status,

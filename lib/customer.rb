@@ -22,6 +22,7 @@ class Customer
   def wombat_obj
     {
       'id' => @shopify_id,
+      'shopify_id' => @shopify_id,
       'firstname' => @firstname,
       'lastname' => @lastname,
       'email' => @email,
