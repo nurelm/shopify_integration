@@ -4,10 +4,12 @@ class Variant
 
   def add_shopify_obj shopify_variant, shopify_options
     @shopify_id = shopify_variant['id']
+    @shopify_product_id = shopify_variant['product_id']
     @name = shopify_variant['title']
-    @sku = shopify_variant['sku']
+    @sku = shopify_variant['sku'].blank? ? "SKU Must Be Set!" : shopify_variant['sku']
     @price = shopify_variant['price']
     @shipping_category = shopify_variant['requires_shipping'] ? 'Shipping Required' : 'Shipping Not Required'
+    @quantity = shopify_variant['inventory_quantity']
     
     @options = Hash.new
     shopify_variant.keys.grep(/option\d*/).each do |option_name|
@@ -30,9 +32,21 @@ class Variant
   
   def shopify_obj
     {
-      "price" => @price,
-      "sku" => @sku
+      'price' => @price,
+      'sku' => @sku
     }.merge(@options)
+  end
+  
+  def wombat_obj
+    {
+      'sku' => @sku,
+      'shopify_id' => @shopify_id,
+      'shopify_product_id' => @shopify_product_id,
+      'shipping_category' => @shipping_category,
+      'price' => @price,
+      'quantity' => @quantity,
+      'options' => @options
+    }
   end
 
 end

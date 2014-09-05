@@ -45,34 +45,26 @@ class Product
   end
   
   def wombat_obj
-    wombat_obj = Array.new
-
-    @variants.each do |variant|
-      wombat_obj << {
-        "id" => variant.shopify_id,
-        "parent_id" => @shopify_id,
-        "name" => "#{@name} (#{variant.name})",
-        "sku" => variant.sku,
-        "description" => @description,
-        "price" => variant.price,
-        "meta_description" => @description,
-        "shipping_category" => variant.shipping_category,
-        "options" => variant.options,
-        "images" => Util.wombat_array(@images)
-      }
-    end
-    
-    wombat_obj
+    {
+      'id' => @shopify_id,
+      'shopify_id' => @shopify_id,
+      'name' => @name,
+      'sku' => @name,
+      'description' => @description,
+      'meta_description' => @description,
+      'variants' => Util.wombat_array(@variants),
+      'images' => Util.wombat_array(@images)
+    }
   end
   
   def shopify_obj
     {
-      "product"=> {
-        "title"=> @name,
-        "body_html"=> @description,
-        "product_type" => "None",
-        "variants"=> Util.shopify_array(@variants),
-        "images" => Util.shopify_array(@images)
+      'product'=> {
+        'title'=> @name,
+        'body_html'=> @description,
+        'product_type' => 'None',
+        'variants'=> Util.shopify_array(@variants),
+        'images' => Util.shopify_array(@images)
       }
     }
   end
