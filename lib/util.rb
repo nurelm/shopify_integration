@@ -21,5 +21,16 @@ class Util
     shopify_array
   end
   
+  def self.shopify_metafields key, value, value_type, namespace
+   [
+      {
+        'key' => key,
+        'value' => value,
+        'value_type' => value_type,
+        'namespace' => namespace
+      }
+    ]  
+  end
+  
 
 end

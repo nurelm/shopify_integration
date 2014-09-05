@@ -23,7 +23,7 @@ class Product
   end
   
   def add_wombat_obj wombat_product, shopify_api
-    @shopify_id = wombat_product['id']
+    @wombat_id = wombat_product['id'].to_s
     @name = wombat_product['name']
     @description = wombat_product['description']
     
@@ -58,11 +58,13 @@ class Product
   end
   
   def shopify_obj
+    puts Util.shopify_metafields('wombat_id', @wombat_id, 'string', 'product').inspect
     {
       'product'=> {
         'title'=> @name,
         'body_html'=> @description,
         'product_type' => 'None',
+        'metafields' => Util.shopify_metafields('wombat_id', @wombat_id, 'string', 'product'),
         'variants'=> Util.shopify_array(@variants),
         'images' => Util.shopify_array(@images)
       }

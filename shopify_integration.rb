@@ -31,6 +31,14 @@ class ShopifyIntegration < EndpointBase::Sinatra::Base
   post '/update_customer' do
     shopify_action 'update_customer', 'customer'
   end
+  
+  post '/add_product' do
+    shopify_action 'add_product', 'product'
+  end
+  
+  post '/update_product' do
+    shopify_action 'update_product', 'product'
+  end
 
   private
 

@@ -32,11 +32,21 @@ class ShopifyAPI
   
   def add_product
     product = Product.new
-    product.add_wombat_obj @payload['products'].first, self
+    product.add_wombat_obj @payload['product'], self
     result = api_post 'products.json', product.shopify_obj
     {
       'objects' => result,
       'message' => "Product added with Shopify ID of #{result['product']['id']} was added."
+    }
+  end
+
+  def update_product
+    product = Product.new
+    product.add_wombat_obj @payload['product'], self
+    result = api_put "products/#{product.shopify_id}.json", product.shopify_obj
+    {
+      'objects' => result,
+      'message' => "Product added with Shopify ID of #{result['product']['id']} was updated."
     }
   end
   
