@@ -1,4 +1,6 @@
 class Product
+  
+  attr_reader :shopify_id
 
   def add_shopify_obj shopify_product, shopify_api
     @shopify_id = shopify_product['id']
@@ -58,7 +60,6 @@ class Product
   end
   
   def shopify_obj
-    puts Util.shopify_metafields('wombat_id', @wombat_id, 'string', 'product').inspect
     {
       'product'=> {
         'title'=> @name,
