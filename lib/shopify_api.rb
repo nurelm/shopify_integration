@@ -122,8 +122,6 @@ class ShopifyAPI
   end
 
   def api_post resource, data
-    puts "RESOURCE: " + resource
-    puts "DATA: " + data.to_json
     response = RestClient.post shopify_url + resource, data.to_json,
                                :content_type => :json, :accept => :json
     JSON.parse response

@@ -7,6 +7,13 @@ class Product
     @name = shopify_product['title']
     @description = shopify_product['body_html']
     
+    @options = Array.new
+    shopify_product['options'].each do |shopify_option|
+      option = Option.new
+      option.add_shopify_obj shopify_option
+      @options << option
+    end
+    
     @variants = Array.new
     shopify_product['variants'].each do |shopify_variant|
       variant = Variant.new
@@ -62,6 +69,7 @@ class Product
       'sku' => @name,
       'description' => @description,
       'meta_description' => @description,
+      'options' => Util.wombat_array(@options),
       'variants' => Util.wombat_array(@variants),
       'images' => Util.wombat_array(@images)
     }
