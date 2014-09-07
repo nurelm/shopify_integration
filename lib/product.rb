@@ -38,10 +38,12 @@ class Product
     @description = wombat_product['description']
     
     @options = Array.new
-    wombat_product['options'].each do |wombat_option|
-      option = Option.new
-      option.add_wombat_obj wombat_option
-      @options << option
+    if !wombat_product['options'].nil?
+      wombat_product['options'].each do |wombat_option|
+        option = Option.new
+        option.add_wombat_obj wombat_option
+        @options << option
+      end
     end
     
     @variants = Array.new
@@ -86,6 +88,12 @@ class Product
         'images' => Util.shopify_array(@images)
       }
     }
+  end
+  
+  def shopify_obj_no_variants
+    obj_no_variants = shopify_obj
+    obj_no_variants['product'].delete('variants')
+    obj_no_variants
   end
 
 end

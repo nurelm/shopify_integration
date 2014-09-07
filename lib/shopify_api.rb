@@ -43,7 +43,10 @@ class ShopifyAPI
   def update_product
     product = Product.new
     product.add_wombat_obj @payload['product'], self
-    result = api_put "products/#{product.shopify_id}.json", product.shopify_obj
+    
+    ## Using shopify_obj_no_variants is a workaround until
+    ## specifying variants' Shopify IDs is added
+    result = api_put "products/#{product.shopify_id}.json", product.shopify_obj_no_variants
     {
       'objects' => result,
       'message' => "Product added with Shopify ID of #{result['product']['id']} was updated."
