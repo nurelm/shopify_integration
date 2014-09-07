@@ -30,6 +30,13 @@ class Product
     @name = wombat_product['name']
     @description = wombat_product['description']
     
+    @options = Array.new
+    wombat_product['options'].each do |wombat_option|
+      option = Option.new
+      option.add_wombat_obj wombat_option
+      @options << option
+    end
+    
     @variants = Array.new
     wombat_product['variants'].each do |wombat_variant|
       variant = Variant.new
@@ -66,7 +73,7 @@ class Product
         'title'=> @name,
         'body_html'=> @description,
         'product_type' => 'None',
-        'metafields' => Util.shopify_metafields('wombat_id', @wombat_id, 'string', 'product'),
+        'options' => Util.shopify_array(@options),
         'variants'=> Util.shopify_array(@variants),
         'images' => Util.shopify_array(@images)
       }
