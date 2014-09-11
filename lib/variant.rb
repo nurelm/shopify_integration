@@ -1,16 +1,18 @@
 class Variant
-  
+
   attr_reader :shopify_id, :sku, :price, :options, :shipping_category, :name
 
   def add_shopify_obj shopify_variant, shopify_options
     @shopify_id = shopify_variant['id']
     @shopify_product_id = shopify_variant['product_id']
     @name = shopify_variant['title']
-    @sku = shopify_variant['sku'].blank? ? "SKU Must Be Set!" : shopify_variant['sku']
-    @price = shopify_variant['price']
-    @shipping_category = shopify_variant['requires_shipping'] ? 'Shipping Required' : 'Shipping Not Required'
-    @quantity = shopify_variant['inventory_quantity']
-    
+    @sku = shopify_variant['sku'].blank? ? "SKU Must Be Set!" :
+                                           shopify_variant['sku']
+    @price = shopify_variant['price'].to_f
+    @shipping_category = shopify_variant['requires_shipping'] ?
+                          'Shipping Required' : 'Shipping Not Required'
+    @quantity = shopify_variant['inventory_quantity'].to_i
+
     @options = Hash.new
     shopify_variant.keys.grep(/option\d*/).each do |option_name|
       if !shopify_variant[option_name].nil?
@@ -20,23 +22,24 @@ class Variant
       end
     end
   end
-  
+
   def add_wombat_obj wombat_variant
-    @price = wombat_variant['price']
+    @price = wombat_variant['price'].to_f
     @sku = wombat_variant['sku']
+    @quantity = wombat_variant['quanity'].to_i
     @options = Hash.new
     wombat_variant['options'].values.each_with_index do |value, index|
       @options['option' + (index + 1).to_s] = value
     end
   end
-  
+
   def shopify_obj
     {
       'price' => @price,
       'sku' => @sku
     }.merge(@options)
   end
-  
+
   def wombat_obj
     {
       'sku' => @sku,
