@@ -13,7 +13,7 @@ class ShopifyAPI
   def get_products
     get_webhook_results 'products', Product
   end
-  
+
   def get_customers
     get_webhook_results 'customers', Customer
   end
@@ -29,7 +29,7 @@ class ShopifyAPI
   def get_orders
     get_webhook_results 'orders', Order
   end
-  
+
   def add_product
     product = Product.new
     product.add_wombat_obj @payload['product'], self
@@ -43,7 +43,7 @@ class ShopifyAPI
   def update_product
     product = Product.new
     product.add_wombat_obj @payload['product'], self
-    
+
     ## Using shopify_obj_no_variants is a workaround until
     ## specifying variants' Shopify IDs is added
     result = api_put "products/#{product.shopify_id}.json", product.shopify_obj_no_variants
@@ -52,7 +52,7 @@ class ShopifyAPI
       'message' => "Product added with Shopify ID of #{result['product']['id']} was updated."
     }
   end
-  
+
   def add_customer
     customer = Customer.new
     customer.add_wombat_obj @payload['customer'], self
@@ -62,7 +62,7 @@ class ShopifyAPI
       'message' => "Customer added with Shopify ID of #{result['customer']['id']} was added."
     }
   end
-  
+
   def update_customer
     customer = Customer.new
     customer.add_wombat_obj @payload['customer'], self
@@ -72,7 +72,7 @@ class ShopifyAPI
       'message' => "Customer added with Shopify ID of #{result['customer']['id']} was updated."
     }
   end
-  
+
   def order order_id
     get_objs "orders/#{order_id}", Order
   end
@@ -118,7 +118,7 @@ class ShopifyAPI
       raise ShopifyError, message, caller
     end
   end
-  
+
   def api_get resource
     response = RestClient.get shopify_url + (final_resource resource)
     JSON.parse response
@@ -137,11 +137,11 @@ class ShopifyAPI
                               :content_type => :json, :accept => :json
     JSON.parse response
   end
-  
+
   def shopify_url
     "https://#{@config['shopify_apikey']}:#{@config['shopify_password']}@#{@config['shopify_host']}/admin/"
   end
-  
+
   def final_resource resource
     if !@config['since'].nil?
       resource += ".json?updated_at_min=#{@config['since']}"
