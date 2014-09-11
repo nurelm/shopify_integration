@@ -40,23 +40,26 @@ class ShopifyIntegration < EndpointBase::Sinatra::Base
     shopify_action 'update_product', 'product'
   end
 
+  post '/set_invetory' do
+    shopify_action 'set_inventory', ''
+  end
+
   private
 
   def shopify_action action, obj_name
     begin
       shopify = ShopifyAPI.new(@payload, @config)
       response  = shopify.send(action)
+      action_type = action.split('_')[0]
 
-      ## If an array is returned, this is a get_ hook
-      if response['objects'].kind_of?(Array)
+      case action_type
+      when 'get'
         response['objects'].each do |obj|
           add_object obj_name, obj
         end
         add_parameter 'since', Time.now.utc.iso8601
 
-      ## If not an array, then it's an add_ hook and we need
-      ## to store the shopify_id
-      else
+      when 'add'
         # This will do a partial update in Wombat, only the new key
         # shopify_id will be added everything else will be the same
         add_object obj_name, { id: @payload[obj_name]['id'],
