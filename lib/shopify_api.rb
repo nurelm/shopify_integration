@@ -36,7 +36,8 @@ class ShopifyAPI
     result = api_post 'products.json', product.shopify_obj
     {
       'objects' => result,
-      'message' => "Product added with Shopify ID of #{result['product']['id']} was added."
+      'message' => "Product added with Shopify ID of " +
+                   "#{result['product']['id']} was added."
     }
   end
 
@@ -46,10 +47,12 @@ class ShopifyAPI
 
     ## Using shopify_obj_no_variants is a workaround until
     ## specifying variants' Shopify IDs is added
-    result = api_put "products/#{product.shopify_id}.json", product.shopify_obj_no_variants
+    result = api_put "products/#{product.shopify_id}.json",
+                     product.shopify_obj_no_variants
     {
       'objects' => result,
-      'message' => "Product added with Shopify ID of #{result['product']['id']} was updated."
+      'message' => "Product added with Shopify ID of " +
+                   "#{result['product']['id']} was updated."
     }
   end
 
@@ -59,17 +62,20 @@ class ShopifyAPI
     result = api_post 'customers.json', customer.shopify_obj
     {
       'objects' => result,
-      'message' => "Customer added with Shopify ID of #{result['customer']['id']} was added."
+      'message' => "Customer added with Shopify ID of " +
+                   "#{result['customer']['id']} was added."
     }
   end
 
   def update_customer
     customer = Customer.new
     customer.add_wombat_obj @payload['customer'], self
-    result = api_put "customers/#{customer.shopify_id}.json", customer.shopify_obj
+    result = api_put "customers/#{customer.shopify_id}.json",
+                     customer.shopify_obj
     {
       'objects' => result,
-      'message' => "Customer added with Shopify ID of #{result['customer']['id']} was updated."
+      'message' => "Customer added with Shopify ID of " +
+                   "#{result['customer']['id']} was updated."
     }
   end
 
@@ -92,7 +98,8 @@ class ShopifyAPI
     objs = Util.wombat_array(get_objs ? get_objs(obj_name, obj) : obj)
     {
       'objects' => objs,
-      'message' => "Successfully retrieved #{objs.length} #{obj_name} from Shopify."
+      'message' => "Successfully retrieved #{objs.length} #{obj_name} " +
+                   "from Shopify."
     }
   end
 
@@ -139,7 +146,8 @@ class ShopifyAPI
   end
 
   def shopify_url
-    "https://#{@config['shopify_apikey']}:#{@config['shopify_password']}@#{@config['shopify_host']}/admin/"
+    "https://#{@config['shopify_apikey']}:#{@config['shopify_password']}" +
+    "@#{@config['shopify_host']}/admin/"
   end
 
   def final_resource resource
