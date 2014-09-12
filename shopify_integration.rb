@@ -20,6 +20,10 @@ class ShopifyIntegration < EndpointBase::Sinatra::Base
     shopify_action 'get_customers', 'customer'
   end
 
+  post '/get_inventories' do
+    shopify_action 'get_inventories', 'inventory'
+  end
+
   post '/add_product' do
     shopify_action 'add_product', 'product'
   end

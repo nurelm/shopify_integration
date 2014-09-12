@@ -18,6 +18,16 @@ class ShopifyAPI
     get_webhook_results 'customers', Customer
   end
 
+  def get_inventories
+    inventories = Array.new
+    get_objs('products', Product).each do |product|
+      product.variants.each do |variant|
+        inventories << variant.wombat_inventory
+      end
+    end
+    get_reply inventories, "Retrieved inventories."
+  end
+
   def get_shipments
     shipments = Array.new
     get_objs('orders', Order).each do |order|
@@ -96,10 +106,14 @@ class ShopifyAPI
 
   def get_webhook_results obj_name, obj, get_objs = true
     objs = Util.wombat_array(get_objs ? get_objs(obj_name, obj) : obj)
+    get_reply objs, "Successfully retrieved #{objs.length} #{obj_name} " +
+                    "from Shopify."
+  end
+
+  def get_reply objs, message
     {
       'objects' => objs,
-      'message' => "Successfully retrieved #{objs.length} #{obj_name} " +
-                   "from Shopify."
+      'message' => message
     }
   end
 
@@ -122,7 +136,7 @@ class ShopifyAPI
       objs
     rescue => e
       message = "Unable to retrieve #{objs_name}: " + e.message
-      raise ShopifyError, message, caller
+      raise ShopifyError, message
     end
   end
 
@@ -138,8 +152,6 @@ class ShopifyAPI
   end
 
   def api_put resource, data
-    puts "URL: " + shopify_url + resource
-    puts "DATA: " + data.to_json
     response = RestClient.put shopify_url + resource, data.to_json,
                               :content_type => :json, :accept => :json
     JSON.parse response

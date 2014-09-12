@@ -52,4 +52,14 @@ class Variant
     }
   end
 
+  def wombat_inventory
+    {
+      "id" => @sku,
+      "product_id" => @sku,
+      "shopify_id" => @shopify_id,
+      'shopify_product_id' => @shopify_product_id,
+      "quantity" => @quantity
+    }
+  end
+
 end
