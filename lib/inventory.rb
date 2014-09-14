@@ -23,9 +23,9 @@ class Inventory
 
   def wombat_obj
     {
-      "id" => @sku.to_s,
-      "product_id" => @sku.to_s,
-      "shopify_id" => @shopify_id.to_s,
+      "id" => @sku,
+      "product_id" => @sku,
+      "shopify_id" => @shopify_id,
       'shopify_product_id' => @shopify_product_id.to_s,
       "quantity" => @quantity
     }

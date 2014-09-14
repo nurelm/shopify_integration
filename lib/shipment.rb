@@ -15,6 +15,7 @@ class Shipment
     @line_items = Array.new
     shopify_shipment['line_items'].each do |shopify_li|
       line_item = LineItem.new
+      line_item.add_shopify_obj(shopify_li, shopify_api)
       @line_items << line_item.add_shopify_obj(shopify_li, shopify_api)
     end
     @shipping_address = order.shipping_address
@@ -41,9 +42,9 @@ class Shipment
 
   def wombat_obj
     {
-      'id' => @shopify_order_id.to_s,
-      'shopify_id' => @shopify_id.to_s,
-      'order_id' => @shopify_order_id.to_s,
+      'id' => @shopify_order_id,
+      'shopify_id' => @shopify_id,
+      'order_id' => @shopify_order_id,
       'email' => @email,
       'status' => @status,
       'shipping_method' => @shipping_method,

@@ -22,7 +22,7 @@ class Product
     shopify_product['variants'].each do |shopify_variant|
       variant = Variant.new(@manage_inv)
       variant.add_shopify_obj shopify_variant, shopify_product['options']
-      @variants << variant unless variant.sku.blank?
+      @variants << variant
     end
 
     @images = Array.new
@@ -69,8 +69,8 @@ class Product
 
   def wombat_obj
     {
-      'id' => @shopify_id.to_s,
-      'shopify_id' => @shopify_id.to_s,
+      'id' => @shopify_id,
+      'shopify_id' => @shopify_id,
       'name' => @name,
       'sku' => @name,
       'description' => @description,

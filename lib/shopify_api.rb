@@ -135,7 +135,7 @@ class ShopifyAPI
     {
       'objects' => result,
       'message' => "Set inventory of SKU #{inventory.sku} " +
-                  "to #{inventory.quantity}."
+                   "to #{inventory.quantity}."
     }
   end
 
