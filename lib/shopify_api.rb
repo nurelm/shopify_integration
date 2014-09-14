@@ -5,7 +5,7 @@ require 'pp'
 class ShopifyAPI
   attr_accessor :order, :config, :payload, :request
 
-  def initialize(payload, config={})
+  def initialize payload, config={}
     @payload = payload
     @config = config
   end
@@ -43,15 +43,15 @@ class ShopifyAPI
   end
 
   def add_product
-    product = Product.new
+    product = Product.new(Util.manage_inv @config)
     product.add_wombat_obj @payload['product'], self
     result = api_post 'products.json', product.shopify_obj
 
     ## Build a list of inventory objects to add to Wombat
     inventories = Array.new
     result['product']['variants'].each do |shopify_variant|
-      variant = Variant.new.add_shopify_obj shopify_variant,
-                                            result['product']['options']
+      variant = Variant.new(Util.manage_inv @config)
+      variant.add_shopify_obj shopify_variant, result['product']['options']
       inventory = Inventory.new.add_obj variant
       inventories << inventory.wombat_obj
     end
@@ -66,7 +66,7 @@ class ShopifyAPI
   end
 
   def update_product
-    product = Product.new
+    product = Product.new(Util.manage_inv @config)
     product.add_wombat_obj @payload['product'], self
 
     ## Using shopify_obj_no_variants is a workaround until
@@ -184,8 +184,8 @@ class ShopifyAPI
   end
 
   def shopify_url
-    "https://#{@config['shopify_apikey']}:#{@config['shopify_password']}" +
-    "@#{@config['shopify_host']}/admin/"
+    "https://#{Util.shopify_apikey @config}:#{Util.shopify_password @config}" +
+    "@#{Util.shopify_host @config}/admin/"
   end
 
   def final_resource resource
