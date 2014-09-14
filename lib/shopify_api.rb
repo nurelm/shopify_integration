@@ -52,7 +52,7 @@ class ShopifyAPI
     ## Build a list of inventory objects to add to Wombat
     inventories = Array.new
     result['product']['variants'].each do |shopify_variant|
-      unless variant.sku.blank?
+      unless shopify_variant['sku'].blank?
         variant = Variant.new(Util.manage_inv @config)
         variant.add_shopify_obj shopify_variant, result['product']['options']
         inventory = Inventory.new.add_obj variant
