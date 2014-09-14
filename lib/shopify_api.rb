@@ -22,7 +22,9 @@ class ShopifyAPI
     inventories = Array.new
     get_objs('products', Product).each do |product|
       product.variants.each do |variant|
-        inventories << variant.wombat_inventory
+        inventory = Inventory.new
+        inventory.add_obj variant
+        inventories << inventory.wombat_obj
       end
     end
     get_reply inventories, "Retrieved inventories."
@@ -86,6 +88,18 @@ class ShopifyAPI
       'objects' => result,
       'message' => "Customer added with Shopify ID of " +
                    "#{result['customer']['id']} was updated."
+    }
+  end
+
+  def set_inventory
+    inventory = Inventory.new
+    inventory.add_wombat_obj @payload['inventory']
+    result = api_put "variants/#{inventory.shopify_id}.json",
+                     {'variant' => inventory.shopify_obj}
+    {
+      'objects' = result,
+      'message' = "Set inventory of SKU #{inventory.sku} " +
+                  "to #{inventory.quanity}."
     }
   end
 

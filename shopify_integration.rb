@@ -44,7 +44,7 @@ class ShopifyIntegration < EndpointBase::Sinatra::Base
     shopify_action 'update_product', 'product'
   end
 
-  post '/set_invetory' do
+  post '/set_inventory' do
     shopify_action 'set_inventory', ''
   end
 

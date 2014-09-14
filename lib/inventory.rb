@@ -1,0 +1,35 @@
+class Inventory
+
+  attr_reader :shopify_id, :sku, :quantity
+
+  def add_obj variant
+    @sku = variant.sku
+    @shopify_id = variant.shopify_id
+    @shopify_product_id = variant.shopify_product_id
+    @quantity = variant.quantity
+
+    self
+  end
+
+  def add_wombat_obj wombat_inventory
+    @sku = wombat_inventory['product_id']
+    @quantity = wombat_inventory['quanity']
+    @shopify_id = wombat_inventory['shopify_id']
+  end
+
+  def wombat_obj
+    {
+      "id" => @sku,
+      "product_id" => @sku,
+      "shopify_id" => @shopify_id,
+      'shopify_product_id' => @shopify_product_id,
+      "quantity" => @quantity
+    }
+  end
+
+  def shopify_obj
+    {
+      "inventory_quantity" => @quantity
+    }
+  end
+end

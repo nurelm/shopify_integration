@@ -1,6 +1,7 @@
 class Variant
 
-  attr_reader :shopify_id, :sku, :price, :options, :shipping_category, :name
+  attr_reader :shopify_id, :shopify_product_id, :quantity,
+              :sku, :price, :options, :shipping_category, :name
 
   def add_shopify_obj shopify_variant, shopify_options
     @shopify_id = shopify_variant['id']
@@ -21,6 +22,8 @@ class Variant
         @options[real_option_name] = shopify_variant[option_name]
       end
     end
+
+    self
   end
 
   def add_wombat_obj wombat_variant
@@ -31,6 +34,8 @@ class Variant
     wombat_variant['options'].values.each_with_index do |value, index|
       @options['option' + (index + 1).to_s] = value
     end
+
+    self
   end
 
   def shopify_obj
@@ -49,16 +54,6 @@ class Variant
       'price' => @price,
       'quantity' => @quantity,
       'options' => @options
-    }
-  end
-
-  def wombat_inventory
-    {
-      "id" => @sku,
-      "product_id" => @sku,
-      "shopify_id" => @shopify_id,
-      'shopify_product_id' => @shopify_product_id,
-      "quantity" => @quantity
     }
   end
 
