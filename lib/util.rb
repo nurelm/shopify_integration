@@ -21,6 +21,25 @@ class Util
     shopify_array
   end
 
+  def self.wombat_shipment_status shopify_status
+    (shopify_status == 'success') ? 'shipped' : 'ready'
+  end
+
+  def self.shopify_shipment_status wombat_status
+    shopify_status = 'error'
+    
+    case wombat_status
+    when 'shipped'
+      shopify_status = 'success'
+    when 'ready'
+      shopify_status = 'pending'
+    else
+      shopify_status = 'failure'
+    end
+
+    shopify_status
+  end
+
   def self.shopify_apikey wombat_config
     wombat_config['shopify_apikey']
   end
