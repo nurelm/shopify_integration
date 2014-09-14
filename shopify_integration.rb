@@ -18,9 +18,15 @@ class ShopifyIntegration < EndpointBase::Sinatra::Base
 
     def shopify_action action, obj_name
       begin
+        action_type = action.split('_')[0]
+
+        if action_type == 'add' && !@payload[obj_name]['shopify_id'].nil?
+           return result 200,
+                  "Ignoring request to add object with shopify_id set."
+        end
+
         shopify = ShopifyAPI.new(@payload, @config)
         response  = shopify.send(action)
-        action_type = action.split('_')[0]
 
         case action_type
         when 'get'
