@@ -69,8 +69,8 @@ class Product
 
   def wombat_obj
     {
-      'id' => @shopify_id,
-      'shopify_id' => @shopify_id,
+      'id' => @shopify_id.to_s,
+      'shopify_id' => @shopify_id.to_s,
       'name' => @name,
       'sku' => @name,
       'description' => @description,

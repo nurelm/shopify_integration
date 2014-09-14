@@ -14,9 +14,9 @@ class LineItem
   def wombat_obj
     [
       {
-        'product_id' => @sku,
-        'shopify_id' => @shopify_id,
-        'shopify_product_id' => @shopify_product_id,
+        'product_id' => @sku.to_s,
+        'shopify_id' => @shopify_id.to_s,
+        'shopify_product_id' => @shopify_product_id.to_s,
         'name' => @name,
         'quantity' => @quantity,
         'price' => @price
