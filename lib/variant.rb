@@ -3,7 +3,7 @@ class Variant
   attr_reader :shopify_id, :shopify_product_id, :quantity,
               :sku, :price, :options, :shipping_category, :name
 
-  def initialize manage_inv
+  def initialize manage_inv=false
     @manage_inv = manage_inv
   end
 
