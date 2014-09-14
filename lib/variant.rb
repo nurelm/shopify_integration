@@ -11,8 +11,7 @@ class Variant
     @shopify_id = shopify_variant['id']
     @shopify_product_id = shopify_variant['product_id']
     @name = shopify_variant['title']
-    @sku = shopify_variant['sku'].blank? ? "SKU Must Be Set!" :
-                                           shopify_variant['sku']
+    @sku = shopify_variant['sku']
     @price = shopify_variant['price'].to_f
     @shipping_category = shopify_variant['requires_shipping'] ?
                           'Shipping Required' : 'Shipping Not Required'

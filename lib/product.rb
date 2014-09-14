@@ -22,7 +22,7 @@ class Product
     shopify_product['variants'].each do |shopify_variant|
       variant = Variant.new(@manage_inv)
       variant.add_shopify_obj shopify_variant, shopify_product['options']
-      @variants << variant
+      @variants << variant unless variant.sku.blank?
     end
 
     @images = Array.new

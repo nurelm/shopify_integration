@@ -22,9 +22,11 @@ class ShopifyAPI
     inventories = Array.new
     get_objs('products', Product).each do |product|
       product.variants.each do |variant|
-        inventory = Inventory.new
-        inventory.add_obj variant
-        inventories << inventory.wombat_obj
+        unless variant.sku.blank?
+          inventory = Inventory.new
+          inventory.add_obj variant
+          inventories << inventory.wombat_obj
+        end
       end
     end
     get_reply inventories, "Retrieved inventories."
@@ -50,10 +52,12 @@ class ShopifyAPI
     ## Build a list of inventory objects to add to Wombat
     inventories = Array.new
     result['product']['variants'].each do |shopify_variant|
-      variant = Variant.new(Util.manage_inv @config)
-      variant.add_shopify_obj shopify_variant, result['product']['options']
-      inventory = Inventory.new.add_obj variant
-      inventories << inventory.wombat_obj
+      unless variant.sku.blank?
+        variant = Variant.new(Util.manage_inv @config)
+        variant.add_shopify_obj shopify_variant, result['product']['options']
+        inventory = Inventory.new.add_obj variant
+        inventories << inventory.wombat_obj
+      end
     end
 
     {
