@@ -17,14 +17,16 @@ class Inventory
     unless wombat_inventory['shopify_id'].nil?
       @shopify_id = wombat_inventory['shopify_id']
     end
+
+    self
   end
 
   def wombat_obj
     {
-      "id" => @sku,
-      "product_id" => @sku,
-      "shopify_id" => @shopify_id,
-      'shopify_product_id' => @shopify_product_id,
+      "id" => @sku.to_s,
+      "product_id" => @sku.to_s,
+      "shopify_id" => @shopify_id.to_s,
+      'shopify_product_id' => @shopify_product_id.to_s,
       "quantity" => @quantity
     }
   end

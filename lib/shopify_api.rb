@@ -5,7 +5,7 @@ require 'pp'
 class ShopifyAPI
   attr_accessor :order, :config, :payload, :request
 
-  def initialize(payload, config={})
+  def initialize payload, config={}
     @payload = payload
     @config = config
   end
@@ -43,18 +43,30 @@ class ShopifyAPI
   end
 
   def add_product
-    product = Product.new
+    product = Product.new(Util.manage_inv @config)
     product.add_wombat_obj @payload['product'], self
     result = api_post 'products.json', product.shopify_obj
+
+    ## Build a list of inventory objects to add to Wombat
+    inventories = Array.new
+    result['product']['variants'].each do |shopify_variant|
+      variant = Variant.new(Util.manage_inv @config)
+      variant.add_shopify_obj shopify_variant, result['product']['options']
+      inventory = Inventory.new.add_obj variant
+      inventories << inventory.wombat_obj
+    end
+
     {
       'objects' => result,
       'message' => "Product added with Shopify ID of " +
-                   "#{result['product']['id']} was added."
+                   "#{result['product']['id']} was added.",
+      'additional_objs' => inventories,
+      'additional_objs_name' => 'inventory'
     }
   end
 
   def update_product
-    product = Product.new
+    product = Product.new(Util.manage_inv @config)
     product.add_wombat_obj @payload['product'], self
 
     ## Using shopify_obj_no_variants is a workaround until
@@ -65,6 +77,28 @@ class ShopifyAPI
       'objects' => result,
       'message' => "Product added with Shopify ID of " +
                    "#{result['product']['id']} was updated."
+    }
+  end
+
+  def update_shipment
+    shipment = Shipment.new.add_wombat_obj @payload['shipment'], self
+    puts "SHIPMENT: " + shipment.shopify_obj.to_json
+    if shipment.shopify_id.nil?
+      ## If Shopify ID doesn't exist, then assume Wombat ID is Shopify
+      ## Order ID and create a new shipment
+      puts "WTF: " + "orders/#{shipment.shopify_order_id}/fulfillments.json"
+      result = api_post "orders/#{shipment.shopify_order_id}/fulfillments.json",
+                        {'fulfillment' => shipment.shopify_obj}
+    else
+      ## If Shopify ID exists, update shipment
+      result = api_put "orders/#{shipment.shopify_order_id}/" +
+                       "fulfillments/#{shipment.shopify_id}.json",
+                       {'fulfillment' => shipment.shopify_obj}
+    end
+    {
+      'objects' => result,
+      'message' => "Updated shipment for order with Shopify ID of " +
+                   "#{shipment.shopify_order_id}."
     }
   end
 
@@ -172,8 +206,8 @@ class ShopifyAPI
   end
 
   def shopify_url
-    "https://#{@config['shopify_apikey']}:#{@config['shopify_password']}" +
-    "@#{@config['shopify_host']}/admin/"
+    "https://#{Util.shopify_apikey @config}:#{Util.shopify_password @config}" +
+    "@#{Util.shopify_host @config}/admin/"
   end
 
   def final_resource resource

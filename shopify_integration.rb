@@ -30,11 +30,17 @@ class ShopifyIntegration < EndpointBase::Sinatra::Base
           add_parameter 'since', Time.now.utc.iso8601
 
         when 'add'
-          # This will do a partial update in Wombat, only the new key
-          # shopify_id will be added everything else will be the same
+          ## This will do a partial update in Wombat, only the new key
+          ## shopify_id will be added everything else will be the same
           add_object obj_name,
                      { id: @payload[obj_name]['id'],
                        shopify_id: response['objects'][obj_name]['id'] }
+        end
+
+        unless response['additional_objs'].nil?
+          response['additional_objs'].each do |obj|
+            add_object response['additional_objs_name'], obj
+          end
         end
 
         result 200, response['message']

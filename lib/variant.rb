@@ -3,6 +3,10 @@ class Variant
   attr_reader :shopify_id, :shopify_product_id, :quantity,
               :sku, :price, :options, :shipping_category, :name
 
+  def initialize manage_inv=false
+    @manage_inv = manage_inv
+  end
+
   def add_shopify_obj shopify_variant, shopify_options
     @shopify_id = shopify_variant['id']
     @shopify_product_id = shopify_variant['product_id']
@@ -41,15 +45,16 @@ class Variant
   def shopify_obj
     {
       'price' => @price,
-      'sku' => @sku
+      'sku' => @sku,
+      'inventory_management' => @manage_inv ? 'shopify' : ''
     }.merge(@options)
   end
 
   def wombat_obj
     {
       'sku' => @sku,
-      'shopify_id' => @shopify_id,
-      'shopify_product_id' => @shopify_product_id,
+      'shopify_id' => @shopify_id.to_s,
+      'shopify_product_id' => @shopify_product_id.to_s,
       'shipping_category' => @shipping_category,
       'price' => @price,
       'quantity' => @quantity,

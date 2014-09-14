@@ -1,11 +1,13 @@
 class Shipment
 
+  attr_reader :id, :shopify_id, :shopify_order_id
+
   def add_shopify_obj shopify_shipment, shopify_api
     @shopify_id = shopify_shipment['id']
     @shopify_order_id = shopify_shipment['order_id']
     order = shopify_api.order(@shopify_order_id).first
     @email = order.email
-    @status = shopify_shipment['status']
+    @status = Util.wombat_shipment_status shopify_shipment['status']
     @shipping_method = (shopify_shipment['tracking_company'] || 'tracking company not set') + ' ' +
                        (shopify_shipment['service'] || 'service not set')
     @tracking = shopify_shipment['tracking_number']
@@ -16,15 +18,32 @@ class Shipment
       @line_items << line_item.add_shopify_obj(shopify_li, shopify_api)
     end
     @shipping_address = order.shipping_address
-    
+
     self
   end
-  
+
+  def add_wombat_obj wombat_shipment, shopify_api
+    @shopify_order_id = wombat_shipment['id']
+    @status = Util.shopify_shipment_status wombat_shipment['status']
+    @shipping_method = wombat_shipment['shipping_method']
+    @tracking_number = wombat_shipment['tracking']
+
+    self
+  end
+
+  def shopify_obj
+    {
+      'status' => @status,
+      'tracking_company' => @shipping_method,
+      'tracking_number' => @tracking_number,
+    }
+  end
+
   def wombat_obj
     {
-      'id' => @shopify_id,
-      'shopify_id' => @shopify_id,
-      'order_id' => @shopify_order_id,
+      'id' => @shopify_order_id.to_s,
+      'shopify_id' => @shopify_id.to_s,
+      'order_id' => @shopify_order_id.to_s,
       'email' => @email,
       'status' => @status,
       'shipping_method' => @shipping_method,
