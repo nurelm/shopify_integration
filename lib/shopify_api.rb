@@ -47,6 +47,8 @@ class ShopifyAPI
     product.add_wombat_obj @payload['product'], self
     result = api_post 'products.json', product.shopify_obj
 
+    puts "OBJ: " + product.shopify_obj.to_json
+
     ## Build a list of inventory objects to add to Wombat
     inventories = Array.new
     result['product']['variants'].each do |shopify_variant|
