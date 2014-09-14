@@ -13,7 +13,7 @@ class Inventory
 
   def add_wombat_obj wombat_inventory
     @sku = wombat_inventory['product_id']
-    @quantity = wombat_inventory['quanity']
+    @quantity = wombat_inventory['quantity']
     unless wombat_inventory['shopify_id'].nil?
       @shopify_id = wombat_inventory['shopify_id']
     end

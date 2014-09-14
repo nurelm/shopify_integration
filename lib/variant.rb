@@ -32,7 +32,7 @@ class Variant
   def add_wombat_obj wombat_variant
     @price = wombat_variant['price'].to_f
     @sku = wombat_variant['sku']
-    @quantity = wombat_variant['quanity'].to_i
+    @quantity = wombat_variant['quantity'].to_i
     @options = Hash.new
     wombat_variant['options'].values.each_with_index do |value, index|
       @options['option' + (index + 1).to_s] = value
