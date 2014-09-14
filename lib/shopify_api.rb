@@ -82,11 +82,9 @@ class ShopifyAPI
 
   def update_shipment
     shipment = Shipment.new.add_wombat_obj @payload['shipment'], self
-    puts "SHIPMENT: " + shipment.shopify_obj.to_json
     if shipment.shopify_id.nil?
       ## If Shopify ID doesn't exist, then assume Wombat ID is Shopify
       ## Order ID and create a new shipment
-      puts "WTF: " + "orders/#{shipment.shopify_order_id}/fulfillments.json"
       result = api_post "orders/#{shipment.shopify_order_id}/fulfillments.json",
                         {'fulfillment' => shipment.shopify_obj}
     else
