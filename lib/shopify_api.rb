@@ -97,9 +97,9 @@ class ShopifyAPI
     result = api_put "variants/#{inventory.shopify_id}.json",
                      {'variant' => inventory.shopify_obj}
     {
-      'objects' = result,
-      'message' = "Set inventory of SKU #{inventory.sku} " +
-                  "to #{inventory.quanity}."
+      'objects' => result,
+      'message' => "Set inventory of SKU #{inventory.sku} " +
+                  "to #{inventory.quantity}."
     }
   end
 
