@@ -27,7 +27,7 @@ class Util
 
   def self.shopify_shipment_status wombat_status
     shopify_status = 'error'
-    
+
     case wombat_status
     when 'shipped'
       shopify_status = 'success'
@@ -50,17 +50,6 @@ class Util
 
   def self.shopify_host wombat_config
     wombat_config['shopify_host']
-  end
-
-  def self.manage_inv wombat_config
-    if !wombat_config.nil? && (wombat_config['shopify_manage_inv'] == 1 ||
-                               wombat_config['shopify_manage_inv'] == 'true' ||
-                               wombat_config['shopify_manage_inv'] == 't' ||
-                               wombat_config['shopify_manage_inv'] == true)
-      return true
-    else
-      return false
-    end
   end
 
 end

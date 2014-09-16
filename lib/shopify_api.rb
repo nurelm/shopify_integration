@@ -59,7 +59,7 @@ class ShopifyAPI
   end
 
   def add_product
-    product = Product.new(Util.manage_inv @config)
+    product = Product.new
     product.add_wombat_obj @payload['product'], self
     result = api_post 'products.json', product.shopify_obj
 
@@ -67,7 +67,7 @@ class ShopifyAPI
     inventories = Array.new
     result['product']['variants'].each do |shopify_variant|
       unless shopify_variant['sku'].blank?
-        variant = Variant.new(Util.manage_inv @config)
+        variant = Variant.new
         variant.add_shopify_obj shopify_variant, result['product']['options']
         inventory = Inventory.new.add_obj variant
         inventories << inventory.wombat_obj
@@ -84,7 +84,7 @@ class ShopifyAPI
   end
 
   def update_product
-    product = Product.new(Util.manage_inv @config)
+    product = Product.new
     product.add_wombat_obj @payload['product'], self
 
     ## Using shopify_obj_no_variants is a workaround until

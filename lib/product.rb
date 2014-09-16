@@ -2,10 +2,6 @@ class Product
 
   attr_reader :shopify_id, :variants
 
-  def initialize manage_inv=false
-    @manage_inv = manage_inv
-  end
-
   def add_shopify_obj shopify_product, shopify_api
     @shopify_id = shopify_product['id']
     @name = shopify_product['title']
@@ -20,7 +16,7 @@ class Product
 
     @variants = Array.new
     shopify_product['variants'].each do |shopify_variant|
-      variant = Variant.new(@manage_inv)
+      variant = Variant.new
       variant.add_shopify_obj shopify_variant, shopify_product['options']
       @variants << variant
     end
@@ -52,7 +48,7 @@ class Product
 
     @variants = Array.new
     wombat_product['variants'].each do |wombat_variant|
-      variant = Variant.new(@manage_inv)
+      variant = Variant.new
       variant.add_wombat_obj wombat_variant
       @variants << variant
     end
