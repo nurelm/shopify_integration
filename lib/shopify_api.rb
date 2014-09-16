@@ -18,7 +18,7 @@ class ShopifyAPI
     get_webhook_results 'customers', Customer
   end
 
-  def get_inventories
+  def get_inventory
     inventories = Array.new
     get_objs('products', Product).each do |product|
       product.variants.each do |variant|
