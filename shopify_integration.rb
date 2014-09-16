@@ -30,10 +30,9 @@ class ShopifyIntegration < EndpointBase::Sinatra::Base
 
         case action_type
         when 'get'
-          ## Necessary?
-          #response['objects'].each do |obj|
-          #  add_object obj_name, obj
-          #end
+          response['objects'].each do |obj|
+            add_object obj_name, obj
+          end
           add_parameter 'since', Time.now.utc.iso8601
 
         when 'add'
