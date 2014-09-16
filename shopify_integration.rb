@@ -43,7 +43,8 @@ class ShopifyIntegration < EndpointBase::Sinatra::Base
                        shopify_id: response['objects'][obj_name]['id'] }
         end
 
-        unless response['additional_objs'].nil?
+        if response.has_key?('additional_objs') &&
+           response.has_key?('additional_objs_name')
           response['additional_objs'].each do |obj|
             add_object response['additional_objs_name'], obj
           end
