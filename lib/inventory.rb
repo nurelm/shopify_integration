@@ -5,7 +5,7 @@ class Inventory
   def add_obj variant
     @sku = variant.sku
     @shopify_id = variant.shopify_id
-    @shopify_product_id = variant.shopify_product_id
+    @shopify_parent_id = variant.shopify_parent_id
     @quantity = variant.quantity
 
     self
@@ -26,7 +26,7 @@ class Inventory
       "id" => @sku,
       "product_id" => @sku,
       "shopify_id" => @shopify_id,
-      'shopify_product_id' => @shopify_product_id.to_s,
+      'shopify_parent_id' => @shopify_parent_id.to_s,
       "quantity" => @quantity
     }
   end

@@ -1,11 +1,11 @@
 class Variant
 
-  attr_reader :shopify_id, :shopify_product_id, :quantity,
+  attr_reader :shopify_id, :shopify_parent_id, :quantity,
               :sku, :price, :options, :shipping_category, :name
 
   def add_shopify_obj shopify_variant, shopify_options
     @shopify_id = shopify_variant['id']
-    @shopify_product_id = shopify_variant['product_id']
+    @shopify_parent_id = shopify_variant['product_id']
     @name = shopify_variant['title']
     @sku = shopify_variant['sku']
     @price = shopify_variant['price'].to_f
@@ -49,7 +49,7 @@ class Variant
     {
       'sku' => @sku,
       'shopify_id' => @shopify_id,
-      'shopify_product_id' => @shopify_product_id,
+      'shopify_parent_id' => @shopify_parent_id,
       'shipping_category' => @shipping_category,
       'price' => @price,
       'quantity' => @quantity,
