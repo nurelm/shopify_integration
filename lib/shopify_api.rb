@@ -100,18 +100,11 @@ class ShopifyAPI
 
   def update_shipment
     shipment = Shipment.new.add_wombat_obj @payload['shipment'], self
-    unless shipment.status == 'ready'
-      if shipment.shopify_id.nil?
-        ## If Shopify ID doesn't exist, then assume Wombat ID is Shopify
-        ## Order ID and create a new shipment
-        result = api_post "orders/#{shipment.shopify_order_id}/fulfillments.json",
-                          {'fulfillment' => shipment.shopify_obj}
-      else
-        ## If Shopify ID exists, update shipment
-        result = api_put "orders/#{shipment.shopify_order_id}/" +
-                         "fulfillments/#{shipment.shopify_id}.json",
-                         {'fulfillment' => shipment.shopify_obj}
-      end
+    unless shipment.status == 'ready' || shipment.shopify_id.nil?
+      ## If Shopify ID exists, update shipment
+      result = api_put "orders/#{shipment.shopify_order_id}/" +
+                       "fulfillments/#{shipment.shopify_id}.json",
+                       {'fulfillment' => shipment.shopify_obj}
       {
         'objects' => result,
         'message' => "Updated shipment for order with Shopify ID of " +
