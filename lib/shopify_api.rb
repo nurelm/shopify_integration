@@ -42,6 +42,20 @@ class ShopifyAPI
 
   def get_orders
     get_webhook_results 'orders', Order
+    orders = Util.wombat_array(get_objs('orders', Order))
+
+    shipments = Array.new
+    orders.each do |order|
+      shipments << Shipment.wombat_obj_from_order(order)
+    end
+
+    {
+      'objects' => orders,
+      'message' => "Successfully retrieved #{orders.length} orders " +
+                   "from Shopify.",
+      'additional_objs' => shipments,
+      'additional_objs_name' => 'shipment'
+    }
   end
 
   def add_product
@@ -110,7 +124,7 @@ class ShopifyAPI
     result = api_post 'customers.json', customer.shopify_obj
     {
       'objects' => result,
-      'message' => "Customer added with Shopify ID of " +
+      'message' => "Customer with Shopify ID of " +
                    "#{result['customer']['id']} was added."
     }
   end
@@ -122,7 +136,7 @@ class ShopifyAPI
                      customer.shopify_obj
     {
       'objects' => result,
-      'message' => "Customer added with Shopify ID of " +
+      'message' => "Customer with Shopify ID of " +
                    "#{result['customer']['id']} was updated."
     }
   end

@@ -8,8 +8,8 @@ class ShopifyIntegration < EndpointBase::Sinatra::Base
   ## Supported endpoints:
   ## get_ for orders, products, inventories, shipments, customers
   ## add_ for product, customer
-  ## update_ for product, customer
-  ## set_invetory
+  ## update_ for product, customer, shipment
+  ## set_inventory
   post '/*_*' do |action, obj_name|
     shopify_action "#{action}_#{obj_name}", obj_name.singularize
   end

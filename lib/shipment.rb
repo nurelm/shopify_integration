@@ -55,4 +55,13 @@ class Shipment
     }
   end
 
+  def self.wombat_obj_from_order order
+    {
+      'id' => order['id'],
+      'status' => 'ready',
+      'shipping_address' => order['shipping_address'],
+      'items' => order['line_items']
+    }
+  end
+
 end
