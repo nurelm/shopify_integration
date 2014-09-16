@@ -1,6 +1,6 @@
 class Shipment
 
-  attr_reader :id, :shopify_id, :shopify_order_id
+  attr_reader :id, :shopify_id, :shopify_order_id, :status
 
   def add_shopify_obj shopify_shipment, shopify_api
     @shopify_id = shopify_shipment['id']
@@ -58,6 +58,8 @@ class Shipment
   def self.wombat_obj_from_order order
     {
       'id' => order['id'],
+      'order_id' => order['id'],
+      'email' => order['email'],
       'status' => 'ready',
       'shipping_address' => order['shipping_address'],
       'items' => order['line_items']
