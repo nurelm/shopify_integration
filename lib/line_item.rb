@@ -17,8 +17,8 @@ class LineItem
     [
       {
         'product_id' => @sku,
-        'shopify_id' => @shopify_id,
-        'shopify_parent_id' => @shopify_parent_id,
+        'shopify_id' => @shopify_id.to_s,
+        'shopify_parent_id' => @shopify_parent_id.to_s,
         'name' => @name,
         'quantity' => @quantity,
         'price' => @price

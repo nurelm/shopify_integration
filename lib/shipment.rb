@@ -42,9 +42,9 @@ class Shipment
 
   def wombat_obj
     {
-      'id' => @shopify_order_id,
-      'shopify_id' => @shopify_id,
-      'order_id' => @shopify_order_id,
+      'id' => @shopify_order_id.to_s,
+      'shopify_id' => @shopify_id.to_s,
+      'order_id' => @shopify_order_id.to_s,
       'email' => @email,
       'status' => @status,
       'shipping_method' => @shipping_method,
