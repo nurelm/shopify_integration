@@ -208,19 +208,20 @@ class ShopifyAPI
 
   def api_get resource
     response = RestClient.get shopify_url + (final_resource resource)
-    JSON.parse response
+    puts "UUUURL: " + shopify_url + (final_resource resource)
+    JSON.parse response.force_encoding("utf-8")
   end
 
   def api_post resource, data
     response = RestClient.post shopify_url + resource, data.to_json,
                                :content_type => :json, :accept => :json
-    JSON.parse response
+    JSON.parse response.force_encoding("utf-8")
   end
 
   def api_put resource, data
     response = RestClient.put shopify_url + resource, data.to_json,
                               :content_type => :json, :accept => :json
-    JSON.parse response
+    JSON.parse response.force_encoding("utf-8")
   end
 
   def shopify_url
