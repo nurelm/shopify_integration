@@ -11,7 +11,25 @@ class ShopifyAPI
   end
 
   def get_products
-    get_webhook_results 'products', Product
+    inventories = Array.new
+    products = get_objs('products', Product)
+    products.each do |product|
+      product.variants.each do |variant|
+        unless variant.sku.blank?
+          inventory = Inventory.new
+          inventory.add_obj variant
+          inventories << inventory.wombat_obj
+        end
+      end
+    end
+
+    {
+      'objects' => Util.wombat_array(products),
+      'message' => "Successfully retrieved #{products.length} products " +
+                   "from Shopify.",
+      'additional_objs' => inventories,
+      'additional_objs_name' => 'inventory'
+    }
   end
 
   def get_customers
