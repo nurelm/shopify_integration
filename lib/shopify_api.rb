@@ -113,9 +113,7 @@ class ShopifyAPI
       }
     else
       response = {
-        'message' => "Did not update shipment for order with " +
-                     "Shopify Order ID of #{shipment.shopify_order_id} and " +
-                     "status of '#{wombat_status}'."
+        'message' => nil
       }
     end
 

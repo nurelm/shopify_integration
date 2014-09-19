@@ -21,8 +21,7 @@ class ShopifyIntegration < EndpointBase::Sinatra::Base
         action_type = action.split('_')[0]
 
         if action_type == 'add' && !@payload[obj_name]['shopify_id'].nil?
-           return result 200,
-                  "Ignoring request to add object with shopify_id set."
+           return result 200
         end
 
         shopify = ShopifyAPI.new(@payload, @config)
@@ -50,7 +49,11 @@ class ShopifyIntegration < EndpointBase::Sinatra::Base
           end
         end
 
-        result 200, response['message']
+        if response['message'].nil?
+          return result 200
+        else
+          return result 200, response['message']
+        end
       rescue => e
         print e.cause
         print e.backtrace.join("\n")
