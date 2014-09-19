@@ -60,7 +60,6 @@ class Shipment
       'id' => order['id'],
       'order_id' => order['id'],
       'email' => order['email'],
-      'status' => 'ready',
       'shipping_address' => order['shipping_address'],
       'items' => order['line_items']
     }
