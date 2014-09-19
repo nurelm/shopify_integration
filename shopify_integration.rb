@@ -20,7 +20,8 @@ class ShopifyIntegration < EndpointBase::Sinatra::Base
       begin
         action_type = action.split('_')[0]
 
-        if action_type == 'add' && !@payload[obj_name]['shopify_id'].nil?
+        if (action_type == 'add' && !@payload[obj_name]['shopify_id'].nil?) ||
+           (action_type == 'update' && @payload[obj_name]['shopify_id'].nil?)
            return result 200
         end
 
