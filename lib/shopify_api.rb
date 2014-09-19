@@ -185,30 +185,24 @@ class ShopifyAPI
 
   def get_objs objs_name, obj_class
     objs = Array.new
-    begin
-      shopify_objs = api_get objs_name
-      if shopify_objs.values.first.kind_of?(Array)
-        shopify_objs.values.first.each do |shopify_obj|
-          obj = obj_class.new
-          obj.add_shopify_obj shopify_obj, self
-          objs << obj
-        end
-      else
+    shopify_objs = api_get objs_name
+    if shopify_objs.values.first.kind_of?(Array)
+      shopify_objs.values.first.each do |shopify_obj|
         obj = obj_class.new
-        obj.add_shopify_obj shopify_objs.values.first, self
+        obj.add_shopify_obj shopify_obj, self
         objs << obj
       end
-
-      objs
-    rescue => e
-      message = "Unable to retrieve #{objs_name}: " + e.message
-      raise ShopifyError, message
+    else
+      obj = obj_class.new
+      obj.add_shopify_obj shopify_objs.values.first, self
+      objs << obj
     end
+
+    objs
   end
 
   def api_get resource
     response = RestClient.get shopify_url + (final_resource resource)
-    puts "UUUURL: " + shopify_url + (final_resource resource)
     JSON.parse response.force_encoding("utf-8")
   end
 
