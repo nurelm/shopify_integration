@@ -31,28 +31,34 @@ class Order
       line_item = LineItem.new
       @line_items << line_item.add_shopify_obj(shopify_li, shopify_api)
     end
-    @shipping_address = {
-      'firstname' => shopify_order['shipping_address']['first_name'],
-      'lastname' => shopify_order['shipping_address']['last_name'],
-      'address1' => shopify_order['shipping_address']['address1'],
-      'address2' => shopify_order['shipping_address']['address2'],
-      'zipcode' => shopify_order['shipping_address']['zip'],
-      'city' => shopify_order['shipping_address']['city'],
-      'state' => shopify_order['shipping_address']['province'],
-      'country' => shopify_order['shipping_address']['country_code'],
-      'phone' => shopify_order['shipping_address']['phone']
-    }
-    @billing_address = {
-      'firstname' => shopify_order['billing_address']['first_name'],
-      'lastname' => shopify_order['billing_address']['last_name'],
-      'address1' => shopify_order['billing_address']['address1'],
-      'address2' => shopify_order['billing_address']['address2'],
-      'zipcode' => shopify_order['billing_address']['zip'],
-      'city' => shopify_order['billing_address']['city'],
-      'state' => shopify_order['billing_address']['province'],
-      'country' => shopify_order['billing_address']['country_code'],
-      'phone' => shopify_order['billing_address']['phone']
-    }
+
+    unless shopify_order['shipping_address'].nil?
+      @shipping_address = {
+        'firstname' => shopify_order['shipping_address']['first_name'],
+        'lastname' => shopify_order['shipping_address']['last_name'],
+        'address1' => shopify_order['shipping_address']['address1'],
+        'address2' => shopify_order['shipping_address']['address2'],
+        'zipcode' => shopify_order['shipping_address']['zip'],
+        'city' => shopify_order['shipping_address']['city'],
+        'state' => shopify_order['shipping_address']['province'],
+        'country' => shopify_order['shipping_address']['country_code'],
+        'phone' => shopify_order['shipping_address']['phone']
+      }
+    end
+
+    unless shopify_order['billing_address'].nil?
+      @billing_address = {
+        'firstname' => shopify_order['billing_address']['first_name'],
+        'lastname' => shopify_order['billing_address']['last_name'],
+        'address1' => shopify_order['billing_address']['address1'],
+        'address2' => shopify_order['billing_address']['address2'],
+        'zipcode' => shopify_order['billing_address']['zip'],
+        'city' => shopify_order['billing_address']['city'],
+        'state' => shopify_order['billing_address']['province'],
+        'country' => shopify_order['billing_address']['country_code'],
+        'phone' => shopify_order['billing_address']['phone']
+      }
+    end
 
     self
   end
