@@ -39,8 +39,8 @@ class ShopifyIntegration < EndpointBase::Sinatra::Base
           ## This will do a partial update in Wombat, only the new key
           ## shopify_id will be added everything else will be the same
           add_object obj_name,
-                     { id: @payload[obj_name]['id'],
-                       shopify_id: response['objects'][obj_name]['id'] }
+                     { 'id' => @payload[obj_name]['id'],
+                       'shopify_id' => response['objects'][obj_name]['id'].to_s }
         end
 
         if response.has_key?('additional_objs') &&
