@@ -4,6 +4,7 @@ class Order
 
   def add_shopify_obj shopify_order, shopify_api
     @shopify_id = shopify_order['id']
+    @source = Util.shopify_host shopify_api.config
     @status = (shopify_order['financial_stauts'] || "financial status not set") + ' / ' +
               (shopify_order['fulfillment_stauts'] || "fulfillment status not set")
     @email = shopify_order['email']
@@ -67,6 +68,7 @@ class Order
     {
       'id' => @shopify_id.to_s,
       'shopify_id' => @shopify_id.to_s,
+      'source' => @source,
       'status' => @status,
       'channel' => 'shopify',
       'email' => @email,

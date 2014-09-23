@@ -4,6 +4,7 @@ class Product
 
   def add_shopify_obj shopify_product, shopify_api
     @shopify_id = shopify_product['id']
+    @source = Util.shopify_host shopify_api.config
     @name = shopify_product['title']
     @description = shopify_product['body_html']
 
@@ -67,6 +68,7 @@ class Product
     {
       'id' => @shopify_id.to_s,
       'shopify_id' => @shopify_id.to_s,
+      'source' => @source,
       'name' => @name,
       'sku' => @name,
       'description' => @description,

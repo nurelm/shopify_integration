@@ -8,6 +8,7 @@ class Customer
     @lastname = shopify_customer['last_name']
     @email = shopify_customer['email']
     @default_address = Address.new.add_shopify_obj(shopify_customer['default_address'])
+    @source = Util.shopify_host shopify_api.config
   end
 
   def add_wombat_obj wombat_customer, shopfiy_api
@@ -23,6 +24,7 @@ class Customer
     {
       'id' => @shopify_id.to_s,
       'shopify_id' => @shopify_id.to_s,
+      'source' => @source,
       'firstname' => @firstname,
       'lastname' => @lastname,
       'email' => @email,

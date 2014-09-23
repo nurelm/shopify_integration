@@ -5,6 +5,7 @@ class Shipment
   def add_shopify_obj shopify_shipment, shopify_api
     @shopify_id = shopify_shipment['id']
     @shopify_order_id = shopify_shipment['order_id']
+    @source = Util.shopify_host shopify_api.config
     order = shopify_api.order(@shopify_order_id).first
     @email = order.email
     @status = Util.wombat_shipment_status shopify_shipment['status']
@@ -44,6 +45,7 @@ class Shipment
     {
       'id' => @shopify_order_id.to_s,
       'shopify_id' => @shopify_id.to_s,
+      'source' => @source,
       'order_id' => @shopify_order_id.to_s,
       'email' => @email,
       'status' => @status,
