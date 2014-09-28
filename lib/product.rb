@@ -70,6 +70,11 @@ class Product
         @images << image
       end
     end
+    @variants.each do |variant|
+      variant.images.each do |image|
+        @images << image
+      end
+    end
 
     self
   end

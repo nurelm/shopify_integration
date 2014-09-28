@@ -1,6 +1,6 @@
 class Variant
 
-  attr_reader :shopify_id, :shopify_parent_id, :quantity,
+  attr_reader :shopify_id, :shopify_parent_id, :quantity, :images,
               :sku, :price, :options, :shipping_category, :name
 
   def add_shopify_obj shopify_variant, shopify_options
@@ -12,6 +12,15 @@ class Variant
     @shipping_category = shopify_variant['requires_shipping'] ?
                           'Shipping Required' : 'Shipping Not Required'
     @quantity = shopify_variant['inventory_quantity'].to_i
+
+    @images = Array.new
+    unless shopify_variant['images'].nil?
+      shopify_variant['images'].each do |shopify_image|
+        image = Image.new
+        image.add_shopify_obj shopify_image
+        @images << image
+      end
+    end
 
     @options = Hash.new
     shopify_variant.keys.grep(/option\d*/).each do |option_name|
@@ -34,6 +43,15 @@ class Variant
     unless wombat_variant['options'].nil?
       wombat_variant['options'].values.each_with_index do |value, index|
         @options['option' + (index + 1).to_s] = value
+      end
+    end
+
+    @images = Array.new
+    unless wombat_variant['images'].nil?
+      wombat_variant['images'].each do |wombat_image|
+        image = Image.new
+        image.add_wombat_obj wombat_image
+        @images << image
       end
     end
 
