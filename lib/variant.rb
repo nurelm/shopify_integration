@@ -30,8 +30,11 @@ class Variant
     @sku = wombat_variant['sku']
     @quantity = wombat_variant['quantity'].to_i
     @options = Hash.new
-    wombat_variant['options'].values.each_with_index do |value, index|
-      @options['option' + (index + 1).to_s] = value
+
+    unless wombat_variant['options'].nil?
+      wombat_variant['options'].values.each_with_index do |value, index|
+        @options['option' + (index + 1).to_s] = value
+      end
     end
 
     self

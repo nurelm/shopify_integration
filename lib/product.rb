@@ -9,24 +9,30 @@ class Product
     @description = shopify_product['body_html']
 
     @options = Array.new
-    shopify_product['options'].each do |shopify_option|
-      option = Option.new
-      option.add_shopify_obj shopify_option
-      @options << option
+    unless shopify_product['options'].nil?
+      shopify_product['options'].each do |shopify_option|
+        option = Option.new
+        option.add_shopify_obj shopify_option
+        @options << option
+      end
     end
 
     @variants = Array.new
-    shopify_product['variants'].each do |shopify_variant|
-      variant = Variant.new
-      variant.add_shopify_obj shopify_variant, shopify_product['options']
-      @variants << variant
+    unless shopify_product['variants'].nil?
+      shopify_product['variants'].each do |shopify_variant|
+        variant = Variant.new
+        variant.add_shopify_obj shopify_variant, shopify_product['options']
+        @variants << variant
+      end
     end
 
     @images = Array.new
-    shopify_product['images'].each do |shopify_image|
-      image = Image.new
-      image.add_shopify_obj shopify_image
-      @images << image
+    unless shopify_product['images'].nil?
+      shopify_product['images'].each do |shopify_image|
+        image = Image.new
+        image.add_shopify_obj shopify_image
+        @images << image
+      end
     end
 
     self
@@ -39,7 +45,7 @@ class Product
     @description = wombat_product['description']
 
     @options = Array.new
-    if !wombat_product['options'].nil?
+    unless wombat_product['options'].nil?
       wombat_product['options'].each do |wombat_option|
         option = Option.new
         option.add_wombat_obj wombat_option
@@ -48,17 +54,21 @@ class Product
     end
 
     @variants = Array.new
-    wombat_product['variants'].each do |wombat_variant|
-      variant = Variant.new
-      variant.add_wombat_obj wombat_variant
-      @variants << variant
+    unless wombat_product['variants'].nil?
+      wombat_product['variants'].each do |wombat_variant|
+        variant = Variant.new
+        variant.add_wombat_obj wombat_variant
+        @variants << variant
+      end
     end
 
     @images = Array.new
-    wombat_product['images'].each do |wombat_image|
-      image = Image.new
-      image.add_wombat_obj wombat_image
-      @images << image
+    unless wombat_product['images'].nil?
+      wombat_product['images'].each do |wombat_image|
+        image = Image.new
+        image.add_wombat_obj wombat_image
+        @images << image
+      end
     end
 
     self

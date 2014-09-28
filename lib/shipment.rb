@@ -9,7 +9,7 @@ class Shipment
     order = shopify_api.order(@shopify_order_id).first
     @email = order.email
     @status = Util.wombat_shipment_status shopify_shipment['status']
-    @shipping_method = (shopify_shipment['tracking_company'] || 'tracking company not set') + ' ' +
+    @shipping_method = (shopify_shipment['tracking_company'] || 'tracking company not set') + ' / ' +
                        (shopify_shipment['service'] || 'service not set')
     @tracking = shopify_shipment['tracking_number']
     @shipped_at = shopify_shipment['created_at']

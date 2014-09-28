@@ -14,11 +14,13 @@ class ShopifyAPI
     inventories = Array.new
     products = get_objs('products', Product)
     products.each do |product|
-      product.variants.each do |variant|
-        unless variant.sku.blank?
-          inventory = Inventory.new
-          inventory.add_obj variant
-          inventories << inventory.wombat_obj
+      unless product.variants.nil?
+        product.variants.each do |variant|
+          unless variant.sku.blank?
+            inventory = Inventory.new
+            inventory.add_obj variant
+            inventories << inventory.wombat_obj
+          end
         end
       end
     end
@@ -39,11 +41,13 @@ class ShopifyAPI
   def get_inventory
     inventories = Array.new
     get_objs('products', Product).each do |product|
-      product.variants.each do |variant|
-        unless variant.sku.blank?
-          inventory = Inventory.new
-          inventory.add_obj variant
-          inventories << inventory.wombat_obj
+      unless product.variants.nil?
+        product.variants.each do |variant|
+          unless variant.sku.blank?
+            inventory = Inventory.new
+            inventory.add_obj variant
+            inventories << inventory.wombat_obj
+          end
         end
       end
     end
@@ -83,12 +87,14 @@ class ShopifyAPI
 
     ## Build a list of inventory objects to add to Wombat
     inventories = Array.new
-    result['product']['variants'].each do |shopify_variant|
-      unless shopify_variant['sku'].blank?
-        variant = Variant.new
-        variant.add_shopify_obj shopify_variant, result['product']['options']
-        inventory = Inventory.new.add_obj variant
-        inventories << inventory.wombat_obj
+    unless result['product']['variants'].nil?
+      result['product']['variants'].each do |shopify_variant|
+        unless shopify_variant['sku'].blank?
+          variant = Variant.new
+          variant.add_shopify_obj shopify_variant, result['product']['options']
+          inventory = Inventory.new.add_obj variant
+          inventories << inventory.wombat_obj
+        end
       end
     end
 
