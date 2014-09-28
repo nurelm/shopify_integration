@@ -20,6 +20,7 @@ class Shipment
       @line_items << line_item.add_shopify_obj(shopify_li, shopify_api)
     end
     @shipping_address = order.shipping_address
+    @billing_address = order.billing_address
 
     self
   end
@@ -53,6 +54,7 @@ class Shipment
       'tracking' => @tracking,
       'shipped_at' => @shipped_at,
       'shipping_address' => @shipping_address,
+      'billing_address' => @billing_address,
       'items' => Util.wombat_array(@line_items)
     }
   end
