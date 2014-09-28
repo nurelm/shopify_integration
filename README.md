@@ -61,7 +61,10 @@ that are worth noting and watching out for:
   its variants. So, when adding a Wombat product to Shopify, we add all
   Wombat images to the Shopify base product. The 'gotcha' here is that
   products added to Shopify with images associated with variants will lose
-  that association.
+  that association. Finally, Shopify checks if image URLs are valid prior
+  to adding them, and will fail to add an image URL silently if not.
+* Customers: Shopify checks to ensure that customer emails and addresses
+  are unique, and will not add a customer if not.
 
 ## Wombat
 
