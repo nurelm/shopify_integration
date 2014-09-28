@@ -70,7 +70,7 @@ class Order
       'shopify_id' => @shopify_id.to_s,
       'source' => @source,
       'status' => @status,
-      'channel' => 'shopify',
+      'channel' => @source,
       'email' => @email,
       'currency' => @currency,
       'placed_on' => @placed_on,
