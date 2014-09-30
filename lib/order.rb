@@ -3,6 +3,8 @@ class Order
   attr_reader :shopify_id, :email, :shipping_address, :billing_address
 
   def add_shopify_obj shopify_order, shopify_api
+    @store_name = Util.shopify_host(shopify_api.config).split('.')[0]
+    @order_number = shopify_order['order_number']
     @shopify_id = shopify_order['id']
     @source = Util.shopify_host shopify_api.config
     @status = 'completed'
@@ -65,7 +67,7 @@ class Order
 
   def wombat_obj
     {
-      'id' => @shopify_id.to_s,
+      'id' => @store_name + '_' + @order_number.to_s,
       'shopify_id' => @shopify_id.to_s,
       'source' => @source,
       'status' => @status,
