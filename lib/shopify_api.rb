@@ -85,10 +85,6 @@ class ShopifyAPI
     product.add_wombat_obj @payload['product'], self
     result = api_post 'products.json', product.shopify_obj
 
-    ## Add metafield to track Wombat ID of base product
-    api_post 'products/' + result['product']['id'].to_s + '/metafields.json',
-             Metafield.new(@payload['product']['id']).shopify_obj
-
     ## Build a list of inventory objects to add to Wombat
     inventories = Array.new
     unless result['product']['variants'].nil?
@@ -153,10 +149,6 @@ class ShopifyAPI
     customer.add_wombat_obj @payload['customer'], self
     result = api_post 'customers.json', customer.shopify_obj
 
-    ## Add metafield to track Wombat ID
-    api_post 'customers/' + result['customer']['id'].to_s + '/metafields.json',
-             Metafield.new(@payload['customer']['id']).shopify_obj
-
     {
       'objects' => result,
       'message' => "Customer with Shopify ID of " +
@@ -167,6 +159,7 @@ class ShopifyAPI
   def update_customer
     customer = Customer.new
     customer.add_wombat_obj @payload['customer'], self
+
     result = api_put "customers/#{customer.shopify_id}.json",
                      customer.shopify_obj
     {
@@ -186,6 +179,11 @@ class ShopifyAPI
       'message' => "Set inventory of SKU #{inventory.sku} " +
                    "to #{inventory.quantity}."
     }
+  end
+
+  def add_metafield obj_name, shopify_id, wombat_id
+    api_post obj_name + 's/' + shopify_id +  '/metafields.json',
+             Metafield.new(@payload[obj_name]['id']).shopify_obj
   end
 
   def order order_id

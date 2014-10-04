@@ -20,6 +20,8 @@ class ShopifyIntegration < EndpointBase::Sinatra::Base
       begin
         action_type = action.split('_')[0]
 
+        ## Add and update shouldn't come with a shopify_id, therefore when
+        ## they do, it indicates Wombat resending an object.
         if (action_type == 'add' && !@payload[obj_name]['shopify_id'].nil?) ||
            (action_type == 'update' && @payload[obj_name]['shopify_id'].nil?)
            return result 200
@@ -37,11 +39,16 @@ class ShopifyIntegration < EndpointBase::Sinatra::Base
 
         when 'add'
           ## This will do a partial update in Wombat, only the new key
-          ## shopify_id will be added everything else will be the same
+          ## shopify_id will be added, everything else will be the same
           add_object obj_name,
                      { 'id' => @payload[obj_name]['id'],
                        'shopify_id' => response['objects'][obj_name]['id'].to_s }
-        end
+
+          ## Add metafield to track Wombat ID
+          shopify.add_metafield obj_name,
+                                response['objects'][obj_name]['id'].to_s,
+                                @payload[obj_name]['id']
+          end
 
         if response.has_key?('additional_objs') &&
            response.has_key?('additional_objs_name')
