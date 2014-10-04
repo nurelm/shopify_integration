@@ -152,6 +152,11 @@ class ShopifyAPI
     customer = Customer.new
     customer.add_wombat_obj @payload['customer'], self
     result = api_post 'customers.json', customer.shopify_obj
+
+    ## Add metafield to track Wombat ID
+    api_post 'customers/' + result['customer']['id'].to_s + '/metafields.json',
+             Metafield.new(@payload['customer']['id']).shopify_obj
+
     {
       'objects' => result,
       'message' => "Customer with Shopify ID of " +
