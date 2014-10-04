@@ -67,7 +67,7 @@ class Order
 
   def wombat_obj
     {
-      'id' => @store_name + '_' + @order_number.to_s,
+      'id' => @store_name.upcase + '-' + @order_number.to_s,
       'shopify_id' => @shopify_id.to_s,
       'source' => @source,
       'channel' => @source,
