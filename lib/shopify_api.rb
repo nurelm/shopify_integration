@@ -186,6 +186,21 @@ class ShopifyAPI
              Metafield.new(@payload[obj_name]['id']).shopify_obj
   end
 
+  def wombat_id_metafield obj_name, shopify_id
+    wombat_id = nil
+    metafields_array = api_get obj_name + 's/' + shopify_id + '/metafields'
+    unless metafields_array.nil? || metafields_array['metafields'].nil?
+      metafields_array['metafields'].each do |metafield|
+        if metafield['key'] == 'wombat_id'
+          wombat_id = metafield['value']
+          break
+        end
+      end
+    end
+
+    wombat_id
+  end
+
   def order order_id
     get_objs "orders/#{order_id}", Order
   end
