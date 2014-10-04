@@ -85,6 +85,10 @@ class ShopifyAPI
     product.add_wombat_obj @payload['product'], self
     result = api_post 'products.json', product.shopify_obj
 
+    ## Add metafield to track Wombat ID of base product
+    api_post 'products/' + result['product']['id'].to_s + '/metafields.json',
+             Metafield.new(@payload['product']['id']).shopify_obj
+
     ## Build a list of inventory objects to add to Wombat
     inventories = Array.new
     unless result['product']['variants'].nil?
@@ -117,7 +121,7 @@ class ShopifyAPI
                      product.shopify_obj_no_variants
     {
       'objects' => result,
-      'message' => "Product added with Shopify ID of " +
+      'message' => "Product with Shopify ID of " +
                    "#{result['product']['id']} was updated."
     }
   end
