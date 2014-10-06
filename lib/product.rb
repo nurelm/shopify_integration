@@ -45,12 +45,16 @@ class Product
     @description = wombat_product['description']
 
     @options = Array.new
-    unless wombat_product['options'].nil?
+    unless wombat_product['options'].blank?
       wombat_product['options'].each do |wombat_option|
         option = Option.new
         option.add_wombat_obj wombat_option
         @options << option
       end
+    else
+      option = Option.new
+      option.add_wombat_obj 'Default'
+      @options << option
     end
 
     @variants = Array.new
