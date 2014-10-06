@@ -65,7 +65,8 @@ class ShopifyIntegration < EndpointBase::Sinatra::Base
           end
         end
 
-        if response['message'].nil?
+        # avoids "Successfully retrieved 0 customers from Shopify."
+        if skip_summary?(response, action_type)
           return result 200
         else
           return result 200, response['message']
@@ -77,4 +78,11 @@ class ShopifyIntegration < EndpointBase::Sinatra::Base
       end
     end
 
+    def skip_summary?(response, action_type)
+      response['message'].nil? || get_without_objects?(response, action_type)
+    end
+
+    def get_without_objects?(response, action_type)
+      action_type == 'get' && response['objects'].to_a.size == 0
+    end
 end
