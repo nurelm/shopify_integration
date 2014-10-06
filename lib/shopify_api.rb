@@ -172,12 +172,20 @@ class ShopifyAPI
   def set_inventory
     inventory = Inventory.new
     inventory.add_wombat_obj @payload['inventory']
-    result = api_put "variants/#{inventory.shopify_id}.json",
-                     {'variant' => inventory.shopify_obj}
+    puts "INV: " + @payload['inventory'].to_json
+    shopify_id = inventory.shopify_id.blank? ?
+                    find_shopify_id_by_sku(inventory.sku) : inventory.shopify_id
+
+    message = 'Could not find item with SKU of ' + inventory.sku
+    unless shopify_id.blank?
+      result = api_put "variants/#{shopify_id}.json",
+                       {'variant' => inventory.shopify_obj}
+      message = "Set inventory of SKU #{inventory.sku} " +
+                "to #{inventory.quantity}."
+    end
     {
       'objects' => result,
-      'message' => "Set inventory of SKU #{inventory.sku} " +
-                   "to #{inventory.quantity}."
+      'message' => message
     }
   end
 
@@ -247,8 +255,37 @@ class ShopifyAPI
     objs
   end
 
-  def api_get resource
-    response = RestClient.get shopify_url + (final_resource resource)
+  def find_shopify_id_by_sku sku
+    count = (api_get 'products/count')['count']
+    page_size = 250
+    pages = (count / page_size.to_f).ceil
+    current_page = 1
+
+    while current_page <= pages do
+      products = api_get 'products',
+                         {'limit' => page_size, 'page' => current_page}
+      current_page += 1
+      products['products'].each do |product|
+        product['variants'].each do |variant|
+          return variant['id'].to_s if variant['sku'] == sku
+        end
+      end
+    end
+
+    return nil
+  end
+
+  def api_get resource, data = {}
+    params = ''
+    unless data.empty?
+      params = '?'
+      data.each do |key, value|
+        params += '&' unless params == '?'
+        params += "#{key}=#{value}"
+      end
+    end
+
+    response = RestClient.get shopify_url + (final_resource resource) + params
     JSON.parse response.force_encoding("utf-8")
   end
 
