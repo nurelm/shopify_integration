@@ -64,8 +64,11 @@ class Shipment
       'id' => order['id'],
       'order_id' => order['id'],
       'email' => order['email'],
+      'channel' => order['source'],
       'shipping_address' => order['shipping_address'],
-      'items' => order['line_items']
+      'billing_address' => order['billing_address'],
+      'items' => order['line_items'],
+      'totals' => order['totals']
     }
   end
 
