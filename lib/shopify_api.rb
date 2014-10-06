@@ -160,8 +160,17 @@ class ShopifyAPI
     customer = Customer.new
     customer.add_wombat_obj @payload['customer'], self
 
-    result = api_put "customers/#{customer.shopify_id}.json",
+    begin
+      result = api_put "customers/#{customer.shopify_id}.json",
                      customer.shopify_obj
+    rescue RestClient::UnprocessableEntity => e
+      # retries without addresses to avoid duplication bug
+      customer_without_addresses = customer.shopify_obj
+      customer_without_addresses["customer"].delete("addresses")
+
+      result = api_put "customers/#{customer.shopify_id}.json", customer_without_addresses
+    end
+
     {
       'objects' => result,
       'message' => "Customer with Shopify ID of " +
