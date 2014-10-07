@@ -74,7 +74,7 @@ class ShopifyIntegration < EndpointBase::Sinatra::Base
       rescue => e
         print e.cause
         print e.backtrace.join("\n")
-        result 500, e.response.nil? ? e.message : e.response
+        result 500, (e.try(:response) ? e.response : e.message)
       end
     end
 
