@@ -4,11 +4,16 @@ require "endpoint_base"
 require_all 'lib'
 
 class ShopifyIntegration < EndpointBase::Sinatra::Base
+  post '/update_shipment' do
+    summary = Shopify::Shipment.new(@payload['shipment'], @config).update!
+
+    result 200, summary
+  end
 
   ## Supported endpoints:
   ## get_ for orders, products, inventories, shipments, customers
   ## add_ for product, customer
-  ## update_ for product, customer, shipment
+  ## update_ for product, customer
   ## set_inventory
   post '/*_*' do |action, obj_name|
     shopify_action "#{action}_#{obj_name}", obj_name.singularize

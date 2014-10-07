@@ -3,6 +3,8 @@ require 'rest-client'
 require 'pp'
 
 class ShopifyAPI
+  include Shopify::APIHelper
+
   attr_accessor :order, :config, :payload, :request
 
   def initialize payload, config={}
@@ -132,28 +134,6 @@ class ShopifyAPI
       'message' => "Product with Shopify ID of " +
                    "#{master_result['product']['id']} was updated."
     }
-  end
-
-  def update_shipment
-    shipment = Shipment.new.add_wombat_obj @payload['shipment'], self
-    wombat_status = @payload['shipment']['status']
-    unless (wombat_status == 'ready' || shipment.shopify_id.nil?)
-      ## If Shopify ID exists, update shipment
-      result = api_put "orders/#{shipment.shopify_order_id}/" +
-                       "fulfillments/#{shipment.shopify_id}.json",
-                       {'fulfillment' => shipment.shopify_obj}
-      response = {
-        'objects' => result,
-        'message' => "Updated shipment for order with Shopify ID of " +
-                     "#{shipment.shopify_order_id}."
-      }
-    else
-      response = {
-        'message' => nil
-      }
-    end
-
-    response
   end
 
   def add_customer
@@ -295,49 +275,6 @@ class ShopifyAPI
 
     return nil
   end
-
-  def api_get resource, data = {}
-    params = ''
-    unless data.empty?
-      params = '?'
-      data.each do |key, value|
-        params += '&' unless params == '?'
-        params += "#{key}=#{value}"
-      end
-    end
-
-    response = RestClient.get shopify_url + (final_resource resource) + params
-    JSON.parse response.force_encoding("utf-8")
-  end
-
-  def api_post resource, data
-    response = RestClient.post shopify_url + resource, data.to_json,
-                               :content_type => :json, :accept => :json
-    JSON.parse response.force_encoding("utf-8")
-  end
-
-  def api_put resource, data
-    response = RestClient.put shopify_url + resource, data.to_json,
-                              :content_type => :json, :accept => :json
-    JSON.parse response.force_encoding("utf-8")
-  end
-
-  def shopify_url
-    "https://#{Util.shopify_apikey @config}:#{Util.shopify_password @config}" +
-    "@#{Util.shopify_host @config}/admin/"
-  end
-
-  def final_resource resource
-    if !@config['since'].nil?
-      resource += ".json?updated_at_min=#{@config['since']}"
-    elsif !@config['id'].nil?
-      resource += "/#{@config['id']}.json"
-    else
-      resource += '.json'
-    end
-    resource
-  end
-
 end
 
 class AuthenticationError < StandardError; end
