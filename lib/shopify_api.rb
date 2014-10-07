@@ -95,25 +95,10 @@ class ShopifyAPI
     product.add_wombat_obj @payload['product'], self
     result = api_post 'products.json', product.shopify_obj
 
-    ## Build a list of inventory objects to add to Wombat
-    inventories = Array.new
-    unless result['product']['variants'].nil?
-      result['product']['variants'].each do |shopify_variant|
-        unless shopify_variant['sku'].blank?
-          variant = Variant.new
-          variant.add_shopify_obj shopify_variant, result['product']['options']
-          inventory = Inventory.new.add_obj variant
-          inventories << inventory.wombat_obj
-        end
-      end
-    end
-
     {
       'objects' => result,
       'message' => "Product added with Shopify ID of " +
-                   "#{result['product']['id']} was added.",
-      'additional_objs' => inventories,
-      'additional_objs_name' => 'inventory'
+                   "#{result['product']['id']} was added."
     }
   end
 
