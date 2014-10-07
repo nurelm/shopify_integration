@@ -62,6 +62,7 @@ class Shipment
   def self.wombat_obj_from_order order
     {
       'id' => order['id'],
+      'shopify_order_id' => order['shopify_id'],
       'order_id' => order['id'],
       'email' => order['email'],
       'channel' => order['source'],

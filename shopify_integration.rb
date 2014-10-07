@@ -22,8 +22,8 @@ class ShopifyIntegration < EndpointBase::Sinatra::Base
 
         ## Add and update shouldn't come with a shopify_id, therefore when
         ## they do, it indicates Wombat resending an object.
-        if (action_type == 'add' && !@payload[obj_name]['shopify_id'].nil?) ||
-           (action_type == 'update' && @payload[obj_name]['shopify_id'].nil?)
+        if wombat_resend_add?(action_type, obj_name) ||
+             update_without_shopify_id?(action_type, obj_name)
            return result 200
         end
 
@@ -76,6 +76,14 @@ class ShopifyIntegration < EndpointBase::Sinatra::Base
         print e.backtrace.join("\n")
         result 500, (e.try(:response) ? e.response : e.message)
       end
+    end
+
+    def wombat_resend_add?(action_type, obj_name)
+      action_type == 'add' && !@payload[obj_name]['shopify_id'].nil?
+    end
+
+    def update_without_shopify_id?(action_type, obj_name)
+      action_type == 'update' && @payload[obj_name]['shopify_id'].nil? && obj_name != "shipment"
     end
 
     def skip_summary?(response, action_type)
