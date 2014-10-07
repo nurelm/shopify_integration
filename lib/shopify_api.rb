@@ -68,18 +68,26 @@ class ShopifyAPI
     get_webhook_results 'orders', Order
     orders = Util.wombat_array(get_objs('orders', Order))
 
-    shipments = Array.new
-    orders.each do |order|
-      shipments << Shipment.wombat_obj_from_order(order)
-    end
-
-    {
+    response = {
       'objects' => orders,
       'message' => "Successfully retrieved #{orders.length} orders " +
-                   "from Shopify.",
-      'additional_objs' => shipments,
-      'additional_objs_name' => 'shipment'
+                   "from Shopify."
     }
+
+    # config to return corresponding shipments
+    if @config[:create_shipments].to_i == 1
+      shipments = Array.new
+      orders.each do |order|
+        shipments << Shipment.wombat_obj_from_order(order)
+      end
+
+      response.merge({
+        'additional_objs' => shipments,
+        'additional_objs_name' => 'shipment'
+      })
+    else
+      response
+    end
   end
 
   def add_product
