@@ -113,12 +113,24 @@ class ShopifyAPI
 
     ## Using shopify_obj_no_variants is a workaround until
     ## specifying variants' Shopify IDs is added
-    result = api_put "products/#{product.shopify_id}.json",
-                     product.shopify_obj_no_variants
+    master_result = api_put(
+      "products/#{product.shopify_id}.json",
+      product.shopify_obj_no_variants
+    )
+
+    product.variants.each do |variant|
+      if variant.shopify_id
+        api_put(
+          "variants/#{variant.shopify_id}.json",
+          variant.shopify_obj
+        )
+      end
+    end
+
     {
-      'objects' => result,
+      'objects' => master_result,
       'message' => "Product with Shopify ID of " +
-                   "#{result['product']['id']} was updated."
+                   "#{master_result['product']['id']} was updated."
     }
   end
 

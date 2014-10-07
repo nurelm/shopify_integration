@@ -35,6 +35,7 @@ class Variant
   end
 
   def add_wombat_obj wombat_variant
+    @shopify_id = wombat_variant['shopify_id'] # or fetch it by sku?
     @price = wombat_variant['price'].to_f
     @sku = wombat_variant['sku']
     @quantity = wombat_variant['quantity'].to_i
@@ -60,10 +61,12 @@ class Variant
 
   def shopify_obj
     {
-      'price' => @price,
-      'sku' => @sku,
-      'inventory_management' => 'shopify'
-    }.merge(@options)
+      'variant' => {
+        'price' => @price,
+        'sku' => @sku,
+        'inventory_management' => 'shopify'
+      }.merge(@options)
+    }
   end
 
   def wombat_obj
