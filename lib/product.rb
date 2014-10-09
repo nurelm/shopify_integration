@@ -105,7 +105,7 @@ class Product
         'body_html'=> @description,
         'product_type' => 'None',
         'options' => Util.shopify_array(@options),
-        'variants'=> Util.shopify_array(@variants),
+        'variants'=> Util.shopify_array(@variants).map {|v| v["variant"]},
         'images' => Util.shopify_array(@images)
       }
     }
