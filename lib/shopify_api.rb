@@ -114,11 +114,17 @@ class ShopifyAPI
     )
 
     product.variants.each do |variant|
-      if variant.shopify_id
+      if variant_id = (variant.shopify_id || find_variant_shopify_id(product.shopify_id, variant.sku))
         api_put(
-          "variants/#{variant.shopify_id}.json",
+          "variants/#{variant_id}.json",
           variant.shopify_obj
         )
+      else
+        begin
+          api_post("products/#{product.shopify_id}/variants.json", variant.shopify_obj)
+        rescue RestClient::UnprocessableEntity
+          # theres already a variant with same options, bail.
+        end
       end
     end
 
@@ -168,7 +174,7 @@ class ShopifyAPI
     inventory.add_wombat_obj @payload['inventory']
     puts "INV: " + @payload['inventory'].to_json
     shopify_id = inventory.shopify_id.blank? ?
-                    find_shopify_id_by_sku(inventory.sku) : inventory.shopify_id
+                    find_product_shopify_id_by_sku(inventory.sku) : inventory.shopify_id
 
     message = 'Could not find item with SKU of ' + inventory.sku
     unless shopify_id.blank?
@@ -249,7 +255,15 @@ class ShopifyAPI
     objs
   end
 
-  def find_shopify_id_by_sku sku
+  def find_variant_shopify_id(product_shopify_id, variant_sku)
+    variants = api_get("products/#{product_shopify_id}/variants")["variants"]
+
+    if variant = variants.find {|v| v["sku"] == variant_sku}
+      variant["id"]
+    end
+  end
+
+  def find_product_shopify_id_by_sku sku
     count = (api_get 'products/count')['count']
     page_size = 250
     pages = (count / page_size.to_f).ceil
