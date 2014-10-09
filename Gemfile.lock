@@ -18,10 +18,6 @@ GEM
       tzinfo (~> 1.1)
     addressable (2.3.6)
     awesome_print (1.2.0)
-    byebug (3.5.1)
-      columnize (~> 0.8)
-      debugger-linecache (~> 1.2)
-      slop (~> 3.6)
     capistrano (3.2.1)
       i18n
       rake (>= 10.0.0)
@@ -30,10 +26,8 @@ GEM
       timers (~> 1.1.0)
     coderay (1.1.0)
     colorize (0.7.3)
-    columnize (0.8.9)
     crack (0.4.2)
       safe_yaml (~> 1.0.0)
-    debugger-linecache (1.2.0)
     diff-lcs (1.2.5)
     dotenv (0.7.0)
     ffi (1.9.3)
@@ -73,9 +67,6 @@ GEM
       coderay (~> 1.1.0)
       method_source (~> 0.8.1)
       slop (~> 3.4)
-    pry-byebug (2.0.0)
-      byebug (~> 3.4)
-      pry (~> 0.10)
     rack (1.5.2)
     rack-protection (1.5.3)
       rack
@@ -143,7 +134,7 @@ DEPENDENCIES
   foreman (= 0.66.0)
   guard-rspec
   jbuilder (= 2.0.7)
-  pry-byebug
+  pry
   rack-test
   rb-fsevent (~> 0.9.1)
   require_all

@@ -11,7 +11,7 @@ gem 'require_all'
 
 group :development do
   gem 'shotgun'
-  gem 'pry-byebug'
+  gem 'pry'
   gem 'awesome_print'
 end
 
