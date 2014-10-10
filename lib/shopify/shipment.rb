@@ -21,6 +21,8 @@ module Shopify
         end
 
         "Updated shipment #{@shipment['id']} with tracking number #{@shipment['tracking']}."
+      else
+        raise "Order #{@shipment['order_id']} not found on Shopify" unless shopify_order_id
       end
     end
 
@@ -29,6 +31,7 @@ module Shopify
     end
 
     def find_order_id_by_order_number(order_number)
+      order_number = order_number.split("-").last
       count = (api_get 'orders/count')['count']
       page_size = 250
       pages = (count / page_size.to_f).ceil
