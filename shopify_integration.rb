@@ -4,8 +4,8 @@ require "endpoint_base"
 require_all 'lib'
 
 class ShopifyIntegration < EndpointBase::Sinatra::Base
-  post '/update_shipment' do
-    summary = Shopify::Shipment.new(@payload['shipment'], @config).update!
+  post '/*_shipment' do # /add_shipment or /update_shipment
+    summary = Shopify::Shipment.new(@payload['shipment'], @config).ship!
 
     result 200, summary
   end
