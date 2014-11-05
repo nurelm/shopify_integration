@@ -190,13 +190,18 @@ class ShopifyAPI
   end
 
   def add_metafield obj_name, shopify_id, wombat_id
-    api_post "#{obj_name}s/#{shopify_id}/metafields.json",
+    api_obj_name = (obj_name == "inventory" ? "product" : obj_name)
+
+    api_post "#{api_obj_name}s/#{shopify_id}/metafields.json",
              Metafield.new(@payload[obj_name]['id']).shopify_obj
   end
 
   def wombat_id_metafield obj_name, shopify_id
     wombat_id = nil
-    metafields_array = api_get "#{obj_name}s/#{shopify_id}/metafields"
+
+    api_obj_name = (obj_name == "inventory" ? "product" : obj_name)
+
+    metafields_array = api_get "#{api_obj_name}s/#{shopify_id}/metafields"
     unless metafields_array.nil? || metafields_array['metafields'].nil?
       metafields_array['metafields'].each do |metafield|
         if metafield['key'] == 'wombat_id'
