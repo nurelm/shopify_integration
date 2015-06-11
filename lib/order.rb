@@ -21,7 +21,8 @@ class Order
     @payments = Array.new
     @totals_payment = 0.00
     shopify_api.transactions(@shopify_id).each do |transaction|
-      if transaction.kind == 'capture' and transaction.status == 'success'
+      if (transaction.kind == 'capture' or transaction.kind == 'sale') and
+          transaction.status == 'success'
         @totals_payment += transaction.amount.to_f
         payment = Payment.new
         @payments << payment.add_shopify_obj(transaction, shopify_api)
